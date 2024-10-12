@@ -1,0 +1,21 @@
+<h1>Person List</h1>
+<ul>
+
+    <!-- Iterate over object_list -->
+
+    {% for object in object_list %}
+
+    <!-- Display Objects -->
+
+    <li>Name:{{ object.name }}, Age: {{object.age}}</li>
+    <hr />
+
+    <!-- If object_list is empty -->
+
+    {% empty %}
+
+    <li>No objects yet.</li>
+
+    {% endfor %}
+
+</ul>
