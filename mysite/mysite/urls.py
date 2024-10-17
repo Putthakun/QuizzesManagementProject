@@ -27,5 +27,6 @@ urlpatterns = [
     path("student/", views.student_list.as_view(), name="student_list"),
     path("teacher/", views.teacher_list.as_view(), name="teacher_list"),
     path("home/", views.home, name=""),
+    path("subject/", views.subject, name=""),
 
 ]

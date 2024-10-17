@@ -16,6 +16,9 @@ def register(request):
 def home(request):
     return render(request, 'blog/home.html')
 
+def subject(request):
+    return render(request, 'blog/subject.html')
+
 class person_list(ListView):
     model = Person
     template_name = "person_list.html"  # Specify your template
