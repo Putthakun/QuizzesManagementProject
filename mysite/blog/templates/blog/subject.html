@@ -5,8 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subject</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" href="/css/subject.css">
 </head>
+<style>
+    body {
+        font-family: sans-serif;
+    }
+    .nav_home{
+        height: 100%;
+        width: 300px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #F3F8FF;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+    .nav_home a{
+        padding: 6px 6px 6px 32px;
+        text-decoration: none;
+        font-size: 20px;
+        color: #71808C;
+        display: block;
+    }
+    .nav_home a i{
+        margin-right: 15px;
+        margin-bottom: 10px;
+    }
+    .nav_home a:hover{
+        color: #447BF7;
+    }
+    .nav_home_head{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .nav_home_head a{
+        color: #447BF7;
+    }
+    .nav_home_tail{
+        margin-top: 120%;
+    }
+
+    .left_main{
+        height: 100%;
+        width: 300px;
+    }
+
+    .main_home{
+        padding-top: 20px;
+    }
+    .main_home_head{
+        font-size: 18px;
+        text-align: right;
+        margin-bottom: 17px;
+        margin-right: 50px;
+    }
+    .main_home_head a{
+        color: #1F384C;
+        font-size: 20px;
+        text-decoration: none;
+        margin-right: 10px;
+    }
+    .main_home_head a i{
+        margin-right: 15px;
+        font-size: 25px;
+    }
+    .main_home_head p{
+        font-size: 15px;
+    }
+    .circle {
+    display: flex;
+    margin-top: 8%;
+    margin-left: 30%;
+    /* background-color: red; */
+    height: 150px;
+}
+.block_circle{
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    /* background-color:#55e214; */
+    justify-content: center;
+    align-items: center;
+}
+.dot{
+    height: 85px;
+    width: 85px;
+    background-color: #C6DBFF;
+    border-radius: 50%;
+}
+
+.cs{
+    width: 40px;
+    height: 40px;
+    background-color: #447BF7;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    margin-right: -20px;
+}
+    
+</style>
 <body>
     <div class="nav_home">
         <div class="nav_home_head">
