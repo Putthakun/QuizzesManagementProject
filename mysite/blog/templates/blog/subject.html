@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="/css/subject.css">
+    <link rel="stylesheet" href="../css/subject.css">
 </head>
 <style>
     body {
@@ -113,7 +113,116 @@
     border-radius: 10px;
     margin-right: -20px;
 }
+
+
+.main_subject{
+    /* background-color: red; */
+    margin-top: 5%;
+    margin-left: 30%;
+    width: 800px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.main_subject_head{
+    /* background-color: greenyellow; */
+    display: flex;
+    margin-bottom: 15px;
+}
+.circle_subject{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color:#C6DBFF;
+    margin-right: 15px;
+}
+.circle_subject_text{
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: left;
+    flex-direction: column;
+    /* background-color: blue; */
     
+}
+.circle_subject_text h2{
+    font-size: 36px;
+    margin-bottom: -2.5px;
+    color: #447BF7;
+}
+.circle_subject_text hr{
+    width: 100%;
+}
+.main_subject_box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    /* background-color: #71808C; */
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 65%;
+    padding: 50px;
+}
+.main_subject_box_head{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    /* background-color: aquamarine; */
+}
+.circle_subject_box{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #C6DBFF;
+    margin-right: 15px;
+}
+.circle_subject_box_text{
+    width: 450px;
+}
+.main_subject_box_mid{
+    display: flex;
+}
+.circle_subject_box_mid{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fff;
+    margin-right: 15px;
+}
+.mid_p{
+    font-weight: bold;
+}
+.circle_subject_box_text_mid{
+    font-size: 12px;
+}
+.main_subject_box_tail{
+    margin-top: 15px;
+    display: flex;
+}
+.circle_subject_box_tail{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+
+}
+.circle_subject_box_tail i{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    margin-top: 18px;
+}
+.circle_subject_box_text_tail{
+    margin-top: 7.5px;
+    width: 500px;
+    font-size: 12px;
+}
 </style>
 <body>
     <div class="nav_home">
@@ -140,6 +249,40 @@
             <i class="fa-regular fa-bell"></i>
         </div>
         <hr>
+
+        <div class="main_subject">
+            <div class="main_subject_head">
+                <div class="circle_subject"></div>
+                <div class="circle_subject_text">
+                    <h2>Math</h2>
+                    <hr>
+                </div>
+            </div>
+            <div class="main_subject_box">
+                <div class="main_subject_box_head">
+                    <div class="circle_subject_box"></div>
+                    <div class="circle_subject_box_text">
+                        <p>Teacher</p>
+                        <hr>
+                        
+                    </div>
+                </div>
+                <div class="main_subject_box_mid">
+                    <div class="circle_subject_box_mid"></div>
+                    <div class="circle_subject_box_text_mid">
+                        <p class="mid_p">Calculus 1  Pre Test - Drip yo yo</p>
+                        <p>Hey! Guys I want you to try this pre test first to check that you guys ready for study!</p>
+                    </div>
+                </div>
+                <div class="main_subject_box_tail">
+                    <div class="circle_subject_box_tail"><i class="fa-regular fa-face-smile"></i></div>
+                    <div class="circle_subject_box_text_tail">
+                        <hr>
+                        <p>Add your reaction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </body>
