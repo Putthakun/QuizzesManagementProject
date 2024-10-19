@@ -1,3 +1,6 @@
+/* *{
+    border: 1px solid red;
+} */
 html, body {
     font-family: 'Open Sans', sans-serif;
     height: 100%;
@@ -14,11 +17,66 @@ html, body {
 .navbar{
     display: flex;
     justify-content: space-between;
-    background-color: aquamarine;
+    background-color: white;
+    border-bottom: 1px solid #CAD1D8;
     height: 10%;
 }
-.left{
+.navbar_left{
+    width: 20%;
+    background-color: #F3F8FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.navbar_left a{
+    text-decoration: none;
+    font-weight: 600;
+}
+.cs{
+    width: 40px;
+    height: 40px;
+    border-radius: 20%;
     background-color: #447BF7;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3.5%;
+    font-size: 20px;
+}
+.navbar_right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    background-color: white;
+}
+.navbar_right a{
+    text-decoration: none;
+    color: #1F384C;
+}
+.navbar_right_box{
+    display: block;
+    /* background-color:red; */
+    margin-right: 10%;
+}
+.navbar_right_icon{
+    font-size: 26px;
+    margin-right: 3.5%;
+    color: #1F384C;
+}
+.username{
+    margin-bottom: -10%;
+    /* background-color: yellow; */
+    color: #1F384C;
+}
+.student{
+    /* background-color: purple; */
+    color: #71808C;
+}
+.navbar_right_icon2{
+    font-size: 20px;
+    color: #B0C3CC;
 }
 .main{
     display: flex;
@@ -78,5 +136,5 @@ html, body {
 }
 .main_right{
     width: 80%;
-    background-color: burlywood;
+    background-color: white;
 }
