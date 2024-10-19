@@ -28,5 +28,6 @@ urlpatterns = [
     path("teacher/", views.teacher_list.as_view(), name="teacher_list"),
     path("home/", views.home, name=""),
     path("subject/", views.subject, name=""),
+    path("home_page/", views.subject, name=""),
 
 ]
