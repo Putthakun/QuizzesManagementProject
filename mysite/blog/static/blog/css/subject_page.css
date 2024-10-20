@@ -147,7 +147,7 @@ html, body {
     /* background-color: red; */
 }
 .main_right_box_subject_head{
-    margin-top: 7.5%;
+    margin-top: 5%;
     /* background-color:burlywood; */
     display: flex;
     width: 100%;
@@ -198,13 +198,13 @@ html, body {
 }
 .main_right_box_subject_main_box_left_head{
     width: 100%;
-    height: 13.5%;
+    height: 15%;
     /* background-color:#26ff00; */
     display: flex;
     justify-content: right;
 }
 .main_right_box_subject_main_box_left_head_circle{
-    margin-top: 10%;
+    /* margin-top: 10%; */
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -291,4 +291,9 @@ html, body {
     margin-top: 3%;
     margin-bottom: 3%;
     font-weight: normal;
+}
+
+.main_right_box_subject_main_box_right_main{
+    height: 53%;
+    /* background-color: #B0C3CC; */
 }
