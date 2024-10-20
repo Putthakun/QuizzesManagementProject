@@ -1,0 +1,294 @@
+/* *{
+    border: 1px solid red;
+} */
+html, body {
+    font-family: 'Open Sans', sans-serif;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.home_page{
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    border-bottom: 1px solid #CAD1D8;
+    height: 10%;
+}
+.navbar_left{
+    width: 20%;
+    background-color: #F3F8FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.navbar_left a{
+    text-decoration: none;
+    font-weight: 600;
+}
+.cs{
+    width: 40px;
+    height: 40px;
+    border-radius: 20%;
+    background-color: #447BF7;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3.5%;
+    font-size: 20px;
+}
+.navbar_right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    background-color: white;
+}
+.navbar_right a{
+    text-decoration: none;
+    color: #1F384C;
+}
+.navbar_right_box{
+    display: block;
+    /* background-color:red; */
+    margin-right: 10%;
+}
+.navbar_right_icon{
+    font-size: 26px;
+    margin-right: 3.5%;
+    color: #1F384C;
+}
+.username{
+    margin-bottom: -10%;
+    /* background-color: yellow; */
+    color: #1F384C;
+}
+.student{
+    /* background-color: purple; */
+    color: #71808C;
+}
+.navbar_right_icon2{
+    font-size: 20px;
+    color: #B0C3CC;
+}
+.main{
+    display: flex;
+    background-color: rgb(92, 156, 156);
+    height: 100%;
+}
+.main_left{
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color:#F3F8FF;
+}
+.menu{
+    height: 50%;
+    /* background-color: green; */
+    display: flex;
+    flex-direction: column;
+}
+.menu a{
+    color: #71808C;
+    border-radius: 10px;
+    margin: 15px 15px 0px 15px;
+    padding: 15px;
+    background-color:#F3F8FF;
+    text-decoration: none;
+    font-size: 16px;
+}
+.menu i{
+    margin-right: 3.5%;
+}
+.menu a:hover{
+    background-color: #C6DBFF;
+    color: #447BF7;
+}
+.menu_bottom{
+    height: 25%;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+}
+.menu_bottom a{
+    color: #71808C;
+    border-radius: 10px;
+    margin: 15px 15px 0px 15px;
+    padding: 15px;
+    background-color:#F3F8FF;
+    text-decoration: none;
+    font-size: 16px;
+}
+.menu_bottom i{
+    margin-right: 3.5%;
+}
+.menu_bottom a:hover{
+    background-color: #C6DBFF;
+    color: #447BF7;
+}
+.main_right{
+    width: 80%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    
+}
+.main_right_box_subject{
+    width: 75%;
+    height: 100%;
+    /* background-color: red; */
+}
+.main_right_box_subject_head{
+    margin-top: 7.5%;
+    /* background-color:burlywood; */
+    display: flex;
+    width: 100%;
+}
+.main_right_box_subject_head_circle{
+    width: 135px;
+    height: 135px;
+    border-radius: 50%;
+    background-color: #C6DBFF;
+    margin-right: 10px;
+}
+.main_right_box_subject_head_name{
+    width: 80%;
+    /* background-color: aqua; */
+}
+.main_right_box_subject_head_name h3{
+    margin-top: 30px;
+    margin-bottom: -10px;
+    color: #447BF7;
+    font-size: 48px;
+}
+.main_right_box_subject_head_name p{
+    border-top: 1px solid black;
+}
+.main_right_box_subject_main{
+    /* margin-top: 20px; */
+    /* background-color:chartreuse; */
+    height: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main_right_box_subject_main_box{
+    /* background-color: violet; */
+    border: 1px solid black;
+    border-radius: 12.5px;
+    width: 90%;
+    height: 80%;
+    display: flex;
+}
+.main_right_box_subject_main_box_left{
+    margin: 15px;
+    width: 10%;
+    /* background-color: lightseagreen; */
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+}
+.main_right_box_subject_main_box_left_head{
+    width: 100%;
+    height: 13.5%;
+    /* background-color:#26ff00; */
+    display: flex;
+    justify-content: right;
+}
+.main_right_box_subject_main_box_left_head_circle{
+    margin-top: 10%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #C6DBFF;
+}
+.main_right_box_subject_main_box_left i{
+    /* background-color: #447BF7; */
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    font-size: 28px;
+    color: #71808C;
+    height: 27.5%;
+}
+.main_right_box_subject_main_box_right{
+    margin: 15px 15px 15px 0px;
+    width: 80%;
+    /* background-color: palegoldenrod; */
+}
+.main_right_box_subject_main_box_right_head{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    /* background-color: #aaaaaa; */
+    height: 13.5%;
+    border-bottom: 1px solid #71808C;
+}
+.main_right_box_subject_main_box_right_main{
+    height: 60%;
+    /* background-color:beige; */
+}
+.main_right_box_subject_main_box_right_tail{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: aquamarine; */
+    border-top: 1px solid #71808C;
+}
+.main_right_box_subject_main_box_right_tail_left{
+    width: 25%;
+    /* background-color: orange; */
+    color: #71808C;
+    font-weight: bold;
+}
+.main_right_box_subject_main_box_right_tail_right{
+    width: 75%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* background-color: aqua; */
+}
+.main_right_box_subject_main_box_right_tail_right p{
+    font-weight: bold;
+    /* background-color: brown; */
+}
+.main_right_box_subject_main_box_right_tail_right_score{
+    /* background-color: palevioletred; */
+    margin-right: 2.5%;
+}
+.main_right_box_subject_main_box_right_tail_right_choice{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: purple; */
+    width: 35%;
+    margin-right: 2.5%;
+}
+.main_right_box_subject_main_box_right_tail_right_choice i{
+    margin-right: 2.5%;
+    color: #1E1E1E;
+    font-size: 20px;
+}
+.main_right_box_subject_main_box_right_tail_right_box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #447BF7;
+    color: white;
+    border-radius: 10px;
+    padding-left: 3%;
+    padding-right: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    font-weight: normal;
+}
