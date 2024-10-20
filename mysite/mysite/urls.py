@@ -28,6 +28,7 @@ urlpatterns = [
     path("teacher/", views.teacher_list.as_view(), name="teacher_list"),
     path("home/", views.home, name=""),
     path("subject/", views.subject, name=""),
-    path("home_page/", views.subject, name=""),
+    path("home_page/", views.home_page, name=""),
+    path("subject_page/", views.subject_page, name=""),
 
 ]

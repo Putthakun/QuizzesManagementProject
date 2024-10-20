@@ -19,8 +19,11 @@ def home(request):
 def subject(request):
     return render(request, 'blog/subject.html')
 
-def subject(request):
+def home_page(request):
     return render(request, 'blog/home_page.html')
+
+def subject_page(request):
+    return render(request, 'blog/subject_page.html')
 
 class person_list(ListView):
     model = Person
