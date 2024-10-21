@@ -62,7 +62,7 @@ def register(request):
             form = StudentForm(request.POST)
             if form.is_valid():
                 form.save()  # Save the student data
-                return redirect('student_list')  # Redirect to the student list page
+                return redirect('blog/student_list')  # Redirect to the student list page
         elif user_type == 'teacher':
             form = TeacherForm(request.POST)
             if form.is_valid():

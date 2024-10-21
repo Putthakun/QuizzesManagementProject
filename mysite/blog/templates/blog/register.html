@@ -44,21 +44,23 @@
 
             if (selectedValue === 'student') {
                 dynamicFormDiv.innerHTML = `
+                    <label for="id_name">Student ID:</label>
+                    <input type="text" name="student_id" id="id_name" required>
                     <label for="id_name">Name:</label>
                     <input type="text" name="name" id="id_name" required>
                     <label for="id_password">Password:</label>
                     <input type="password" name="password" id="id_password" required>
-                    <label for="id_roll_number">Roll Number:</label>
-                    <input type="text" name="roll_number" id="id_roll_number" required>
                 `;
             } else if (selectedValue === 'teacher') {
                 dynamicFormDiv.innerHTML = `
+                    <label for="id_name">Teacher ID:</label>
+                    <input type="text" name="teacher_id" id="id_name" required>
                     <label for="id_name">Name:</label>
                     <input type="text" name="name" id="id_name" required>
                     <label for="id_password">Password:</label>
                     <input type="password" name="password" id="id_password" required>
                     <label for="id_subject">Subject:</label>
-                    <input type="text" name="subject" id="id_subject" required>
+                    <input type="text" name="subject_id" id="id_subject" required>
                 `;
             }
         });
