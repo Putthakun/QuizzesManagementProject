@@ -1,0 +1,63 @@
+<!-- register.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'blog/css/register.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Login Account!</h2>
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- User Type Selection -->
+            <div>
+                <label for="user_type">I am a:</label>
+                <select name="user_type" id="user_type" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+
+            <!-- Dynamic Form Display -->
+            <div id="dynamic-form">
+                <!-- This will be filled based on user type selection -->
+            </div>
+
+            <button type="submit">Login Now!</button>
+        </form>
+    </div>
+
+    <script>
+        const userTypeSelect = document.getElementById('user_type');
+        const dynamicFormDiv = document.getElementById('dynamic-form');
+
+        userTypeSelect.addEventListener('change', function() {
+            const selectedValue = this.value;
+            dynamicFormDiv.innerHTML = ''; // Clear previous fields
+
+            if (selectedValue === 'student') {
+                dynamicFormDiv.innerHTML = `
+                    <label for="id_name">Student ID:</label>
+                    <input type="text" name="student_id" id="id_name" required>
+                    <label for="id_password">Password:</label>
+                    <input type="password" name="password" id="id_password" required>
+                `;
+            } else if (selectedValue === 'teacher') {
+                dynamicFormDiv.innerHTML = `
+                    <label for="id_name">Teacher ID:</label>
+                    <input type="text" name="teacher_id" id="id_name" required>
+                    <label for="id_password">Password:</label>
+                    <input type="password" name="password" id="id_password" required>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

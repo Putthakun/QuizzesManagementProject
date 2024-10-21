@@ -13,6 +13,9 @@ def hello(request):
 def register(request):
     return render(request, 'blog/register.html')
 
+def login(request):
+    return render(request, 'blog/login_page.html')
+
 def home(request):
     return render(request, 'blog/home.html')
 
@@ -62,7 +65,7 @@ def register(request):
             form = StudentForm(request.POST)
             if form.is_valid():
                 form.save()  # Save the student data
-                return redirect('blog/student_list')  # Redirect to the student list page
+                return redirect('blog/login_page.html')  # Redirect to the student list page
         elif user_type == 'teacher':
             form = TeacherForm(request.POST)
             if form.is_valid():
