@@ -34,7 +34,7 @@
         </form>
         {% if error_message %}
         <p class="error_message">{{ error_message }}</p>
-       
+        {% endif %}
     </div>
     <script>
         const userTypeSelect = document.getElementById('user_type');
@@ -62,7 +62,6 @@
         });
         
     </script>
-     {% endif %}
 </body>
 </html>
 
