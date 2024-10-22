@@ -1,6 +1,10 @@
 # forms.py
 from django import forms
-from .models import Student,Teacher
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from .models import *
+from django.contrib.auth.models import *
+
 
 class StudentForm(forms.ModelForm):
     class Meta:

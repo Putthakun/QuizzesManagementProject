@@ -1,4 +1,4 @@
-<!-- register.html -->
+<!-- login.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'blog/css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/login.css' %}">
 </head>
 <body>
     <div class="container">
@@ -32,8 +32,10 @@
 
             <button type="submit">Login Now!</button>
         </form>
+        {% if error_message %}
+        <p class="error_message">{{ error_message }}</p>
+       
     </div>
-
     <script>
         const userTypeSelect = document.getElementById('user_type');
         const dynamicFormDiv = document.getElementById('dynamic-form');
@@ -58,6 +60,9 @@
                 `;
             }
         });
+        
     </script>
+     {% endif %}
 </body>
 </html>
+
