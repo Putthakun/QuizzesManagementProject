@@ -30,6 +30,9 @@ def home_page(request):
 def subject_page(request):
     return render(request, 'blog/subject_page.html')
 
+def take_test_page(request):
+    return render(request, 'blog/take_test_page.html')
+
 #Hash password 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
