@@ -117,7 +117,25 @@
 }
 .main_right_multi_main_box_tail{
     height: 15%;
-    background-color: rgb(218, 251, 72);
+    /* background-color: rgb(218, 251, 72); */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.main_right_multi_main_box_tail_upload{
+    border-radius: 10px;
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+    height: 20%;
+    width: 13%;
+    background-color: #F6F7F8;
+    border: 1px solid #71808C;
+    padding: 15px 30px 15px 30px;
+    color: #71808C;
+}
+.main_right_multi_main_box_tail_upload i{
+    color: #71808C;
 }
 .main_right_multi_main_box_submit{
     height: 10%;
