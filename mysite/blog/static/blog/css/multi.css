@@ -99,7 +99,21 @@
 }
 .main_right_multi_main_box_main{
     height: 50%;
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
+}
+.main_right_multi_main_box_main_head{
+    display: flex;
+}
+.main_right_multi_main_box_main_head p{
+    color: red;
+}
+.main_right_multi_main_box_main_main textarea{
+    padding: 15px;
+    background-color: #F6F7F8;
+    border: 1px solid #71808C;
+    border-radius: 10px;
+    color: #71808C;
+    font-size: 16px;
 }
 .main_right_multi_main_box_tail{
     height: 15%;
