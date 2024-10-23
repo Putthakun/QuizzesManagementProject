@@ -299,3 +299,19 @@ html, body {
     height: 53%;
     /* background-color: #B0C3CC; */
 }
+
+.main_right_box_take_test_main_tail{
+    height: 15%;
+    /* background-color:blanchedalmond; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main_right_box_take_test_main_tail_box a{
+    padding: 10px 25px 10px 25px;
+    background-color: #447BF7;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}

@@ -22,7 +22,7 @@
                     <i class="fa-regular fa-circle-user"></i>
                 </div>
                 <div class="navbar_right_box">
-                    <p class="username">Fristname Lastname</p>
+                    <p class="username">{{request.session.username}}</p>
                     <p class="student">Student</p>
                 </div>
                 <div class="navbar_right_icon2">
@@ -33,14 +33,14 @@
         <div class="main">
             <div class="main_left">
                 <div class="menu">
-                    <a href="#"><i class="fa-solid fa-house"></i>Home</a>
+                    <a href="{% url 'home_page' %}"><i class="fa-solid fa-house"></i>Home</a>
                     <a href="#"><i class="fa-solid fa-square-poll-vertical"></i>Dashboard</a>
                     <a href="#"><i class="fa-solid fa-square-plus"></i>Create Test Set</a>
-                    <a href="#"><i class="fa-regular fa-pen-to-square"></i>Practice</a>
+                    <a href="{% url 'subject_page' %}"><i class="fa-regular fa-pen-to-square"></i>Practice</a>
                 </div>
                 <div class="menu_bottom">
                     <a href="#"><i class="fa-solid fa-user"></i>Profile</a>
-                    <a href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a>
+                    <a href="{% url 'login' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a>
                 </div>
             </div>
             <div class="main_right">
@@ -81,7 +81,7 @@
                         </div>
                         <div class="main_right_box_take_test_main_tail">
                             <div class="main_right_box_take_test_main_tail_box">
-                                <a href="#">Take Test</a>
+                                <a href="{% url 'multi_page' %}">Take Test</a>
                             </div>
                         </div>
                     </div>

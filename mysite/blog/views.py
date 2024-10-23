@@ -12,6 +12,8 @@ from .models import *
 
 import hashlib
 
+import re
+
 
 # Create your views here.
 
@@ -36,6 +38,9 @@ def take_test_page(request):
 def multi_page(request):
     return render(request, 'blog/multi_page.html')
 
+def home_page_teacher(request):
+    return render(request, 'blog/home_page_teacher.html')
+
 #Hash password 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
@@ -46,6 +51,17 @@ def register(request):
         user_type = request.POST.get('user_type')  # Get the user type from the form
         if user_type == 'student':
             form = StudentForm(request.POST)
+
+            student_id = request.POST.get('student_id')
+            if not re.match(r'^\d+$', student_id):                                 # regular expression
+                 messages.error(request, "Student ID must be numeric.")
+                 return render(request, 'blog/register.html', {'form': form})
+            
+            name = request.POST.get('name')
+            if not re.match(r'^[A-Za-z\s]+$', name):                                 # regular expression
+                 messages.error(request, "Name must be English only.")
+                 return render(request, 'blog/register.html', {'form': form})
+            
             if form.is_valid():
                 student = form.save(commit=False)  
                 student.password = hash_password(form.cleaned_data['password'])  # เข้ารหัสรหัสผ่าน
@@ -53,6 +69,17 @@ def register(request):
                 return redirect('login')  # Redirect to the login page
         elif user_type == 'teacher':
             form = TeacherForm(request.POST)
+            teacher_id = request.POST.get('teacher_id')
+
+            if not re.match(r'^\d+$', teacher_id):                              # regular expression
+                 messages.error(request, "teacher ID must be numeric.")
+                 return render(request, 'blog/register.html', {'form': form})
+            
+            name = request.POST.get('name')
+            if not re.match(r'^[A-Za-z\s]+$', name):                                 # regular expression
+                 messages.error(request, "Name must be English only.")
+                 return render(request, 'blog/register.html', {'form': form})
+            
             if form.is_valid():
                 teacher = form.save(commit=False) 
                 teacher.password = hash_password(form.cleaned_data['password'])  # เข้ารหัสรหัสผ่าน
@@ -72,6 +99,10 @@ def login(request):
 
         if user_type == 'student':
             student_id = request.POST.get('student_id')
+            if not re.match(r'^\d+$', student_id):                          # regular expression
+                 messages.error(request, "Student ID must be numeric.")
+                 return render(request, 'blog/login_page.html')
+            
             raw_password = request.POST.get('password')
             try:
                 # fide stdent_id
@@ -84,6 +115,7 @@ def login(request):
                 if student.password == hashed_password:
                     # Session
                     request.session['user_id'] = student.id
+                    request.session['username'] = student.name
                     return redirect('home_page')
                 else:
                     error_message = "Invalid student ID or password."
@@ -92,6 +124,9 @@ def login(request):
 
         elif user_type == 'teacher':
             teacher_id = request.POST.get('teacher_id')
+            if not re.match(r'^\d+$', teacher_id):                         # regular expression
+                 messages.error(request, "teacher ID must be numeric.")
+                 return render(request, 'blog/login_page.html')
             raw_password = request.POST.get('password')
             try:
                 # fide teacher_id
@@ -104,7 +139,8 @@ def login(request):
                 if teacher.password == hashed_password:
                     # Session
                     request.session['user_id'] = teacher.id
-                    return redirect('home_page')
+                    request.session['username'] = teacher.name
+                    return redirect('home_page_teacher')
                 else:
                     error_message = "Invalid teacher ID or password."
             except Teacher.DoesNotExist:

@@ -35,6 +35,11 @@
         {% if error_message %}
         <p class="error_message">{{ error_message }}</p>
         {% endif %}
+        
+        {% for message in messages %}
+        <p class="error_message">{{ message }}</p>  
+        {% endfor %}
+
     </div>
     <script>
         const userTypeSelect = document.getElementById('user_type');

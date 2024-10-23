@@ -25,11 +25,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("register/", views.register, name="register"),
     path("login/", views.login, name="login"),
-    path("home/", views.home, name=""),
+    path("home/", views.home, name="home"),
     path("subject/", views.subject, name=""),
     path("home_page/", views.home_page, name="home_page"),
-    path("subject_page/", views.subject_page, name=""),
-    path("take_test_page/", views.take_test_page, name=""),
-    path("multi_page/", views.multi_page, name=""),
+    path("subject_page/", views.subject_page, name="subject_page"),
+    path("take_test_page/", views.take_test_page, name="take_test_page"),
+    path("multi_page/", views.multi_page, name="multi_page"),
+    path("home_page_teacher/", views.home_page_teacher, name="home_page_teacher"),
 
 ]
