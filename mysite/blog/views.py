@@ -33,6 +33,9 @@ def subject_page(request):
 def take_test_page(request):
     return render(request, 'blog/take_test_page.html')
 
+def multi_page(request):
+    return render(request, 'blog/multi_page.html')
+
 #Hash password 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()

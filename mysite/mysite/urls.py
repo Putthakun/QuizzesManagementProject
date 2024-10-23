@@ -30,5 +30,6 @@ urlpatterns = [
     path("home_page/", views.home_page, name="home_page"),
     path("subject_page/", views.subject_page, name=""),
     path("take_test_page/", views.take_test_page, name=""),
+    path("multi_page/", views.multi_page, name=""),
 
 ]
