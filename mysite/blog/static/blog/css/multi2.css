@@ -184,6 +184,9 @@
     color: white;
     border-radius: 10px;
 }
+.box_end_test{
+    cursor: pointer;
+}
 .box_free{
     width: 100px;
 }
