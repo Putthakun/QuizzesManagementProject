@@ -39,3 +39,22 @@
     /* background-color: aquamarine; */
     height: 25%;
  }
+.box_add_subject{
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 80%;
+    right: 1.5%;
+    background-color: #F6F7F8;
+    border-radius: 50%;
+    border: 1px solid #E4E8EB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.box_add_subject i{
+    font-size: 24px;
+}
+.box_add_subject a{
+    color: #3F4D58;
+}
