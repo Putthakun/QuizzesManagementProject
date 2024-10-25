@@ -8,7 +8,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'blog/css/home_page.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'blog/css/multi.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'blog/css/multi.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/choice_page.css' %}">
 </head>
 <body>
     <div class="home_page">
@@ -45,7 +46,7 @@
             </div>
             <div class="main_right">
                 <!-- Main -->
-                <!-- <div class="main_right_multi_head">
+                <div class="main_right_multi_head">
                     <div class="main_right_multi_head_box_left">
                         <div class="main_right_multi_head_left">
                         
@@ -60,14 +61,14 @@
                         </div>
                     </div>
                     <div class="main_right_multi_head_box_right">
-                        <p>เวลาที่เหลือ</p><p>04:23/180:00</p>
+                        <p>เวลาที่เหลือ</p><p>05:23/180:00</p>
                     </div>
                 </div>
                 <div class="main_right_multi_main">
                     <div class="main_right_multi_main_box">
                         <div class="main_right_multi_main_box_head">
                             <div class="main_right_multi_main_box_head_left">
-                                <h3>Questions 3</h3><p>*</p>
+                                <h3>Questions 4</h3><p>*</p>
                             </div>
                             <div class="main_right_multi_main_box_head_right">
                                 1 + 1 = ?
@@ -75,37 +76,55 @@
                         </div>
                         <div class="main_right_multi_main_box_main">
                             <div class="main_right_multi_main_box_main_head">
-                                <h3>Fill in this blank</h3><p>*</p>
+                                <h3>Choose your choices</h3><p>*</p>
                             </div>
                             <div class="main_right_multi_main_box_main_main">
-                                <textarea name="" id="" rows="8" cols="103" placeholder="Enter your answer"></textarea>
+                                <!-- <textarea name="" id="" rows="8" cols="103" placeholder="Enter your answer"></textarea> -->
+                                <form action="" class="form_main">
+                                    <div class="form_1">
+                                        <input type="radio" value="1" name="check_box">
+                                        <label for="">1</label>
+                                    </div>
+                                    <div class="form_1">
+                                        <input type="radio" value="2" name="check_box">
+                                        <label for="">2</label>
+                                    </div>
+                                    <div class="form_1">
+                                        <input type="radio" value="3" name="check_box">
+                                        <label for="">3</label>
+                                    </div>
+                                    <div class="form_1">
+                                        <input type="radio" value="4" name="check_box">
+                                        <label for="">4</label>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="main_right_multi_main_box_tail">
-                            <div class="main_right_multi_main_box_tail_upload">
+                            <!-- <div class="main_right_multi_main_box_tail_upload">
                                 <p>Upload File</p>
                                 <i class="fa-solid fa-file-arrow-up"></i>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="main_right_multi_main_box_submit">
                             <div class="main_right_multi_main_box_submit_main">
                                 <div class="main_right_multi_main_box_submit_main_head">
-                                    3/20
+                                    4/20
                                 </div>
                                 <div class="main_right_multi_main_box_submit_main_tail">
                                     <i class="fa-solid fa-arrow-left"></i>
                                         <div class="main_right_multi_main_box_submit_main_tail_left">
                                         
-                                    </div> -->
-                                    <!-- <i class="fa-solid fa-arrow-right"></i> -->
-                                    <!-- <div class="main_right_multi_main_box_submit_main_tail_right">
+                                    </div>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                    <div class="main_right_multi_main_box_submit_main_tail_right">
                                         
-                                    </div> -->
-                                <!-- </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> --> 
+                </div> 
             </div>
         </div>
     </div>
