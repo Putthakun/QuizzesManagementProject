@@ -1,0 +1,39 @@
+.main_right_teacher_container{
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main_right_teacher_box_container{
+    width: 80%;
+    height: 80%;
+    /* background-color: aqua; */
+    /* display: flex;
+    flex-direction: row; */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.main_right_teacher_box{
+    width: 225px;
+    height: 225px;
+    /* background-color: orange; */
+    border: 1px solid #CAD1D8;
+    margin-right: 50px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+ .main_right_teacher_box_head{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E6F1FF;
+    height: 75%;
+ }
+ .main_right_teacher_box_tail{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: aquamarine; */
+    height: 25%;
+ }
