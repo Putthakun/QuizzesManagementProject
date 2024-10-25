@@ -32,5 +32,6 @@ urlpatterns = [
     path("take_test_page/", views.take_test_page, name="take_test_page"),
     path("multi_page/", views.multi_page, name="multi_page"),
     path("home_page_teacher/", views.home_page_teacher, name="home_page_teacher"),
+    path("choice_page/", views.choice_page, name="choice_page"),
 
 ]

@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choices</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'blog/css/home_page.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'blog/css/multi.css' %}"> -->
+</head>
+<body>
+    <div class="home_page">
+        <div class="navbar">
+            <div class="navbar_left">
+                <a href="#" class="cs">CS</a>
+                <a href="#">Quizzes Management</a>
+            </div>
+            <div class="navbar_right">
+                <div class="navbar_right_icon">
+                    <i class="fa-regular fa-circle-user"></i>
+                </div>
+                <div class="navbar_right_box">
+                    <p class="username">{{request.session.username}}</p>
+                    <p class="student">Student</p>
+                </div>
+                <div class="navbar_right_icon2">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="main_left">
+                <div class="menu">
+                    <a href="{% url 'home_page' %}"><i class="fa-solid fa-house"></i>Home</a>
+                    <a href="#"><i class="fa-solid fa-square-poll-vertical"></i>Dashboard</a>
+                    <a href="#"><i class="fa-solid fa-square-plus"></i>Create Test Set</a>
+                    <a href="{% url 'subject_page' %}"><i class="fa-regular fa-pen-to-square"></i>Practice</a>
+                </div>
+                <div class="menu_bottom">
+                    <a href="#"><i class="fa-solid fa-user"></i>Profile</a>
+                    <a href="{% url 'login' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a>
+                </div>
+            </div>
+            <div class="main_right">
+                <!-- Main -->
+                <!-- <div class="main_right_multi_head">
+                    <div class="main_right_multi_head_box_left">
+                        <div class="main_right_multi_head_left">
+                        
+                        </div>
+                        <div class="main_right_multi_head_right">
+                            <div class="main_right_multi_head_right_top">
+                                <p>Maths</p>
+                            </div>
+                            <div class="main_right_multi_head_right_bottom">
+                                <p>Calculus 2  Pre Test - Yay</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main_right_multi_head_box_right">
+                        <p>เวลาที่เหลือ</p><p>04:23/180:00</p>
+                    </div>
+                </div>
+                <div class="main_right_multi_main">
+                    <div class="main_right_multi_main_box">
+                        <div class="main_right_multi_main_box_head">
+                            <div class="main_right_multi_main_box_head_left">
+                                <h3>Questions 3</h3><p>*</p>
+                            </div>
+                            <div class="main_right_multi_main_box_head_right">
+                                1 + 1 = ?
+                            </div>
+                        </div>
+                        <div class="main_right_multi_main_box_main">
+                            <div class="main_right_multi_main_box_main_head">
+                                <h3>Fill in this blank</h3><p>*</p>
+                            </div>
+                            <div class="main_right_multi_main_box_main_main">
+                                <textarea name="" id="" rows="8" cols="103" placeholder="Enter your answer"></textarea>
+                            </div>
+                        </div>
+                        <div class="main_right_multi_main_box_tail">
+                            <div class="main_right_multi_main_box_tail_upload">
+                                <p>Upload File</p>
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                            </div>
+                        </div>
+                        <div class="main_right_multi_main_box_submit">
+                            <div class="main_right_multi_main_box_submit_main">
+                                <div class="main_right_multi_main_box_submit_main_head">
+                                    3/20
+                                </div>
+                                <div class="main_right_multi_main_box_submit_main_tail">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                        <div class="main_right_multi_main_box_submit_main_tail_left">
+                                        
+                                    </div> -->
+                                    <!-- <i class="fa-solid fa-arrow-right"></i> -->
+                                    <!-- <div class="main_right_multi_main_box_submit_main_tail_right">
+                                        
+                                    </div> -->
+                                <!-- </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> --> 
+            </div>
+        </div>
+    </div>
+</body>
+</html>
