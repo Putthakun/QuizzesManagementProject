@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     const showPopup = document.querySelector('.box_add_subject');
     const popupContainer = document.querySelector('.popup_container');
-    const popupClose = document.querySelector('.popup_box_right_tail_btn');
+    const popupClose = document.querySelector('.popup_box_tail_cancel');
 
     console.log("showPopup:", showPopup);  // ตรวจสอบค่า showPopup
     console.log("popupContainer:", popupContainer);  // ตรวจสอบค่า popupContainer
-    console.log("popupClose:", popupClose);  // ตรวจสอบค่า popupContainer
+    console.log("popupClose:", popupClose);  // ตรวจสอบค่า popupClose
 
     if (showPopup && popupContainer) {
         showPopup.onclick = () => {
