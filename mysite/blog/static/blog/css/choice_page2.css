@@ -40,6 +40,12 @@
     justify-content: center;
     align-items: center;
     position: absolute;
+    /* opacity: 0; */
+    pointer-events: none;
+}
+.popup_container.active{
+    opacity: 1;
+    pointer-events: auto;
 }
 .popup_container_box{
     width: 70%;
@@ -164,7 +170,7 @@
 }
 .popup_box_right_main{
     overflow: auto;
-    height: 60%;
+    height: 70%;
     /* background-color: orchid; */
     padding-top: 15px;
 }
@@ -218,6 +224,18 @@
     /* background-color: #D85454; */
 }
 .popup_box_right_tail{
-    height: 20%;
-    background-color: blanchedalmond;
+    height: 10%;
+    /* background-color: blanchedalmond; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup_box_right_tail button{
+    background-color:#447BF7;
+    color: white;
+    border: none;
+    width: 12.5%;
+    height: 50%;
+    border-radius: 10px;
+    font-weight: bold;
 }
