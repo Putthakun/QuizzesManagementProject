@@ -1,0 +1,36 @@
+.main_right_teacher_container{
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main_right_teacher_left{
+    width: 20%;
+    height: 100%;
+    background-color: aqua;
+    display: flex;
+    justify-content: flex-end;
+}
+.main_right_teacher_left_circle{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #C6DBFF;
+    margin-right: 15px;
+}
+.main_right_teacher_right{
+    width: 80%;
+    height: 100%;
+    background-color: red;
+}
+.main_right_teacher_right_head{
+    background-color:antiquewhite;
+    width: 100%;
+    height: 20%;
+}
+.main_right_teacher_right_main{
+    background-color: aquamarine;
+    width: 100%;
+    height: 80%;
+}

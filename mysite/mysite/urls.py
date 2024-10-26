@@ -33,5 +33,6 @@ urlpatterns = [
     path("multi_page/", views.multi_page, name="multi_page"),
     path("home_page_teacher/", views.home_page_teacher, name="home_page_teacher"),
     path("choice_page/", views.choice_page, name="choice_page"),
+    path("subject_teacher_page/", views.subject_teacher_page, name="subject_teacher_page"),
 
 ]

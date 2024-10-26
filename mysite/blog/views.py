@@ -44,6 +44,9 @@ def home_page_teacher(request):
 def choice_page(request):
     return render(request, 'blog/choice_page.html')
 
+def subject_teacher_page(request):
+    return render(request, 'blog/subject_teacher_page.html')
+
 #Hash password 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
