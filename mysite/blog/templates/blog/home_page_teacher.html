@@ -8,10 +8,11 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'blog/css/home_page.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/css/home_page_teacher.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/home_page_teacher2.css' %}">
 
 </head>
 <body>
+    <script src="{% static 'blog/js/popup_teacher.js' %}"></script>
     <div class="home_page">
         <div class="navbar">
             <div class="navbar_left">
@@ -142,11 +143,56 @@
                     
                 </div>
 
-                <div class="box_add_subject">
-                    <a href="#"><i class="fa-solid fa-plus"></i></a>
-                </div>
+                <button class="box_add_subject">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
 
             </div>
+        </div>
+        <div class="popup_container">
+            <div class="popup_container_box">
+                <div class="popup_box">
+                   <div class="popup_box_top">
+                        <div class="popup_box_top_left">
+                            <label class="popup_box_top_left_num">รหัสวิชา :</label>
+                            <label class="popup_box_top_left_name">ชื่อวิชา :</label>
+                        </div>
+                        <div class="popup_box_top_right">
+                            <div class="popup_box_top_right_select">
+                                <select name="num_subject" id="num_subject" placeholder="ตัวเลือก">
+                                    <option value="1234">1234</option>
+                                    <option value="5555">5555</option>
+                                    <option value="9999">9999</option>
+                                </select>
+                            </div>
+                            <div class="popup_box_top_right_input">
+                                <input type="text" placeholder="ชื่อวิชา">
+                            </div>         
+                        </div>
+                        <!-- <div class="popup_box_top_num">
+                            <label for="">รหัสวิชา :</label>
+                            <select name="num_subject" id="num_subject" placeholder="ตัวเลือก">
+                                <option value="1234">1234</option>
+                                <option value="5555">5555</option>
+                                <option value="9999">9999</option>
+                            </select>
+                        </div>
+                        <div class="popup_box_top_name">
+                            <label for="">ชื่อวิชา :</label>
+                            <input type="text">
+                        </div> -->
+                   </div>
+                   <div class="popup_box_tail">
+                        <button class="popup_box_tail_cancel">
+                            Cancle
+                        </button>
+                        <button class="popup_box_tail_save">
+                            Save
+                        </button>
+                   </div>
+                </div>
+            </div>
+    
         </div>
     </div>
 </body>
