@@ -14,4 +14,10 @@ class StudentForm(forms.ModelForm):
 class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['user_type','teacher_id','name', 'password', 'subject_id']  # Make sure roll_number is included
+        fields = ['user_type','teacher_id','name', 'password']  # Make sure roll_number is included
+
+
+class SubjectForm(forms.ModelForm):
+    class Meta:
+        model = Subject
+        fields = ['code', 'name']

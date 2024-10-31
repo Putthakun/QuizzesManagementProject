@@ -6,7 +6,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 #form.py
-from .forms import StudentForm, TeacherForm
+from .forms import *
 #model.py
 from .models import *
 
@@ -39,7 +39,21 @@ def multi_page(request):
     return render(request, 'blog/multi_page.html')
 
 def home_page_teacher(request):
-    return render(request, 'blog/home_page_teacher.html')
+     # ตรวจสอบให้แน่ใจว่าผู้ใช้ได้เข้าสู่ระบบผ่าน session
+    user_id = request.session.get('user_id')  # ดึง user_id จาก session
+    if user_id:
+        try:
+            # ดึงข้อมูลอาจารย์ตาม user_id ที่เก็บใน session
+            teacher = Teacher.objects.get(id=user_id)
+            # ดึงข้อมูลวิชาที่เชื่อมโยงกับอาจารย์
+            subjects = teacher.subjects.all()  # ใช้ related_name 'subjects'
+            return render(request, 'blog/home_page_teacher.html', {'subjects': subjects})
+        except Teacher.DoesNotExist:
+            # หากไม่พบอาจารย์ในฐานข้อมูล
+            return redirect('login')  # ส่งผู้ใช้ไปยังหน้าเข้าสู่ระบบ
+    else:
+        # หากยังไม่ได้เข้าสู่ระบบ อาจส่งผู้ใช้ไปยังหน้าเข้าสู่ระบบ
+        return redirect('login')  # เปลี่ยนเป็นชื่อ URL ที่ถูกต้อง
 
 def choice_page(request):
     return render(request, 'blog/choice_page.html')
@@ -95,7 +109,6 @@ def register(request):
 
 #login
 from .models import Student
-
 def login(request):
     if request.method == 'POST':
         user_type = request.POST.get('user_type')
@@ -153,5 +166,27 @@ def login(request):
 
     return render(request, 'blog/login_page.html')
 
+#hash password
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
+#create subject
+def create_subject(request):
+    if request.method == 'POST':
+        form = SubjectForm(request.POST)
+        if form.is_valid():
+            subject = form.save(commit=False)  # สร้าง Subject แต่ยังไม่บันทึกลงฐานข้อมูล
+             # ดึงข้อมูลอาจารย์ที่เกี่ยวข้องกับผู้ใช้ที่ล็อกอินอยู่
+            teacher = Teacher.objects.get(id=request.user.id)
+      
+            # กำหนดค่า teacher ให้กับวิชาที่สร้าง
+            subject.teacher = teacher
+            subject.save()  # บันทึก Subject ลงฐานข้อมูล
+
+            messages.success(request, "Subject created successfully")
+            return redirect('home_page')  # เปลี่ยนไปยังหน้าที่ต้องการ
+        else:
+            messages.error(request, "Could not create subject. Please check the form.")
+    else:
+        form = SubjectForm()
+    return render(request, 'blog/home_page_teacher.html', {'form': form})
