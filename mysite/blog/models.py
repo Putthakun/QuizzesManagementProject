@@ -9,25 +9,30 @@ from django.core.validators import RegexValidator
 
 # Create your models here.
 class Person(models.Model):
-    user_type = models.CharField(max_length=10)
-    name = models.CharField(max_length=100)
+    UERR_TYPE_CHOICES = [
+        ('student', 'student'),
+        ('teacher', 'teacher'),
+    ]
+    user_type = models.CharField(max_length=10, choices=UERR_TYPE_CHOICES)
+    firstname = models.CharField(max_length=128, default='')
+    lastname = models.CharField(max_length=128, default='')
     password = models.CharField(max_length=128)
 
     def __str__(self):
-        return f"{self.user_type} - {self.name}"
+        return f"{self.user_type} - {self.firstname}"
 
 class Student(Person):
     student_id_validator = RegexValidator(
         regex=r'^\d+$',
         message="Student ID must be numeric."
     )
-    student_id = models.CharField( max_length=16,
+    student_id = models.CharField(max_length=16,
                                       validators=[student_id_validator],
                                       unique=True)
     
 
     def __str__(self):
-        return f"{self.name} - {self.student_id}"  # คืนค่าเป็น string
+        return f"{self.firstname} - {self.student_id}"  # คืนค่าเป็น string
 
 class Teacher(Person):
     teacher_id_validator = RegexValidator(
@@ -39,7 +44,7 @@ class Teacher(Person):
                                       unique=True)
 
     def __str__(self):
-        return f"{self.name} - {self.teacher_id}"  # คืนค่าเป็น string
+        return f"{self.firstname} - {self.teacher_id}"  # คืนค่าเป็น string
 
 
 class Subject(models.Model):
