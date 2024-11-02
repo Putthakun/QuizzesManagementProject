@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.views.generic import ListView
-from django.views.generic import TemplateView
-from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth import authenticate, login
+from rest_framework import generics
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import *
+from .serializers import *
 from django.contrib import messages
-#form.py
-from .forms import StudentForm, TeacherForm
+from django.contrib.auth.hashers import check_password
+
 #model.py
 from .models import *
 
@@ -39,122 +41,57 @@ def multi_page(request):
     return render(request, 'blog/multi_page.html')
 
 def home_page_teacher(request):
-    return render(request, 'blog/home_page_teacher.html')
+     # ตรวจสอบให้แน่ใจว่าผู้ใช้ได้เข้าสู่ระบบผ่าน session
+    user_id = request.session.get('user_id')  # ดึง user_id จาก session
+    if user_id:
+        try:
+            # ดึงข้อมูลอาจารย์ตาม user_id ที่เก็บใน session
+            teacher = Teacher.objects.get(id=user_id)
+            # ดึงข้อมูลวิชาที่เชื่อมโยงกับอาจารย์
+            subjects = teacher.subjects.all()  # ใช้ related_name 'subjects'
+            return render(request, 'blog/home_page_teacher.html', {'subjects': subjects})
+        except Teacher.DoesNotExist:
+            # หากไม่พบอาจารย์ในฐานข้อมูล
+            return redirect('login')  # ส่งผู้ใช้ไปยังหน้าเข้าสู่ระบบ
+    else:
+        # หากยังไม่ได้เข้าสู่ระบบ อาจส่งผู้ใช้ไปยังหน้าเข้าสู่ระบบ
+        return redirect('login')  # เปลี่ยนเป็นชื่อ URL ที่ถูกต้อง
 
 def choice_page(request):
     return render(request, 'blog/choice_page.html')
 
-def subject_teacher_page(request):
-    return render(request, 'blog/subject_teacher_page.html')
 
-#Hash password 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+#Register student
+class StudentRegisterView(generics.CreateAPIView):
+    serializer_class = StudentSerializer
 
-# register
-def register(request):
-    if request.method == 'POST':
-        user_type = request.POST.get('user_type')  # Get the user type from the form
-        if user_type == 'student':
-            form = StudentForm(request.POST)
+#Register teacher
+class TeacherRegisterView(generics.CreateAPIView):
+    serializer_class = TeacherSerializer
 
-            student_id = request.POST.get('student_id')
-            if not re.match(r'^\d+$', student_id):                                 # regular expression
-                 messages.error(request, "Student ID must be numeric.")
-                 return render(request, 'blog/register.html', {'form': form})
-            
-            name = request.POST.get('name')
-            if not re.match(r'^[A-Za-z\s]+$', name):                                 # regular expression
-                 messages.error(request, "Name must be English only.")
-                 return render(request, 'blog/register.html', {'form': form})
-            
-            if form.is_valid():
-                student = form.save(commit=False)  
-                student.password = hash_password(form.cleaned_data['password'])  # เข้ารหัสรหัสผ่าน
-                student.save()  # Save the student data
-                return redirect('login')  # Redirect to the login page
-        elif user_type == 'teacher':
-            form = TeacherForm(request.POST)
-            teacher_id = request.POST.get('teacher_id')
+@api_view(['POST'])
+def login_view(request):
+    user_type = request.data.get('user_type')  # รับ user_type (student หรือ teacher)
+    user_id = request.data.get('id')           # รับ student_id หรือ teacher_id
+    password = request.data.get('password')    # รับรหัสผ่าน
 
-            if not re.match(r'^\d+$', teacher_id):                              # regular expression
-                 messages.error(request, "teacher ID must be numeric.")
-                 return render(request, 'blog/register.html', {'form': form})
-            
-            name = request.POST.get('name')
-            if not re.match(r'^[A-Za-z\s]+$', name):                                 # regular expression
-                 messages.error(request, "Name must be English only.")
-                 return render(request, 'blog/register.html', {'form': form})
-            
-            if form.is_valid():
-                teacher = form.save(commit=False) 
-                teacher.password = hash_password(form.cleaned_data['password'])  # เข้ารหัสรหัสผ่าน
-                teacher.save()  # Save the teacher data
-                return redirect('login')  # Redirect to the login page
+    if user_type == 'student':
+        try:
+            user = Student.objects.get(student_id=user_id)
+            if check_password(password, user.password):  # ตรวจสอบรหัสผ่าน
+                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
+        except Student.DoesNotExist:
+            return Response({"error": {"student_id": ["Student ID not found"]}}, status=status.HTTP_404_NOT_FOUND)
+    elif user_type == 'teacher':
+        try:
+            user = Teacher.objects.get(teacher_id=user_id)
+            if check_password(password, user.password):  # ตรวจสอบรหัสผ่าน
+                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
+        except Teacher.DoesNotExist:
+            return Response({"error": {"teacher_id": ["Teacher ID not found"]}}, status=status.HTTP_404_NOT_FOUND)
     else:
-        form = StudentForm()  # Default to StudentForm
-
-    return render(request, 'blog/register.html', {'form': form})
-
-#login
-from .models import Student
-
-def login(request):
-    if request.method == 'POST':
-        user_type = request.POST.get('user_type')
-
-        if user_type == 'student':
-            student_id = request.POST.get('student_id')
-            if not re.match(r'^\d+$', student_id):                          # regular expression
-                 messages.error(request, "Student ID must be numeric.")
-                 return render(request, 'blog/login_page.html')
-            
-            raw_password = request.POST.get('password')
-            try:
-                # fide stdent_id
-                student = Student.objects.get(student_id=student_id)
-                
-                # Hash password
-                hashed_password = hash_password(raw_password)
-                
-                # Check password
-                if student.password == hashed_password:
-                    # Session
-                    request.session['user_id'] = student.id
-                    request.session['username'] = student.name
-                    return redirect('home_page')
-                else:
-                    error_message = "Invalid student ID or password."
-            except Student.DoesNotExist:
-                error_message = "Student not found."
-
-        elif user_type == 'teacher':
-            teacher_id = request.POST.get('teacher_id')
-            if not re.match(r'^\d+$', teacher_id):                         # regular expression
-                 messages.error(request, "teacher ID must be numeric.")
-                 return render(request, 'blog/login_page.html')
-            raw_password = request.POST.get('password')
-            try:
-                # fide teacher_id
-                teacher = Teacher.objects.get(teacher_id=teacher_id)
-                
-                # Hash password
-                hashed_password = hash_password(raw_password)
-                
-                # Check password
-                if teacher.password == hashed_password:
-                    # Session
-                    request.session['user_id'] = teacher.id
-                    request.session['username'] = teacher.name
-                    return redirect('home_page_teacher')
-                else:
-                    error_message = "Invalid teacher ID or password."
-            except Teacher.DoesNotExist:
-                error_message = "teacher not found."
-
-        return render(request, 'blog/login_page.html', {'error_message': error_message})
-
-    return render(request, 'blog/login_page.html')
-
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+        return Response({"error": {"user_type": ["Invalid user type"]}}, status=status.HTTP_400_BAD_REQUEST)

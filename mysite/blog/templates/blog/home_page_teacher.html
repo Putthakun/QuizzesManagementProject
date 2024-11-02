@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'blog/css/home_page.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/css/home_page_teacher2.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/home_page_teacher.css' %}">
 
 </head>
 <body>
@@ -48,99 +48,17 @@
             <div class="main_right_teacher_container">
                 <!-- Main -->
                 <div class="main_right_teacher_box_container">
+                    {% for subject in subjects %}
                     <div class="main_right_teacher_box">
                         <div class="main_right_teacher_box_head">
                             
                         </div>
                         <div class="main_right_teacher_box_tail">
-                            
+                            <div class="text-tail-code-subject" >{{subject.code}}</div>
+                        <div class="text-tail-subject-name" >{{subject.name}}</div>
                         </div>
                     </div>
-
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-                    <div class="main_right_teacher_box">
-                        <div class="main_right_teacher_box_head">
-                            
-                        </div>
-                        <div class="main_right_teacher_box_tail">
-                            
-                        </div>
-                    </div>
-                    
+                    {% endfor %}
                 </div>
 
                 <button class="box_add_subject">
@@ -148,53 +66,38 @@
                 </button>
 
             </div>
-        </div>
+        </div> 
         <div class="popup_container">
             <div class="popup_container_box">
                 <div class="popup_box">
-                   <div class="popup_box_top">
-                        <div class="popup_box_top_left">
-                            <label class="popup_box_top_left_num">รหัสวิชา :</label>
-                            <label class="popup_box_top_left_name">ชื่อวิชา :</label>
-                        </div>
-                        <div class="popup_box_top_right">
-                            <div class="popup_box_top_right_select">
-                                <select name="num_subject" id="num_subject" placeholder="ตัวเลือก">
-                                    <option value="1234">1234</option>
-                                    <option value="5555">5555</option>
-                                    <option value="9999">9999</option>
-                                </select>
+                    <form method="POST">  
+                        {% csrf_token %}
+                        <div class="popup_box_top">
+                            <div class="popup_box_top_left">
+                                <label class="popup_box_top_left_num">รหัสวิชา :</label>
+                                <label class="popup_box_top_left_name">ชื่อวิชา :</label>
                             </div>
-                            <div class="popup_box_top_right_input">
-                                <input type="text" placeholder="ชื่อวิชา">
+                            <div class="popup_box_top_right">
+                                <div class="popup_box_top_right_input">
+                                    <!-- <input type="text" name="code" > -->
+                                    {{ form.code }}
+                                </div>
+                                <div class="popup_box_top_right_input">
+                                    <!-- <input type="text" name="name" > -->
+                                    {{ form.name }}
+                                </div>
                             </div>
-                            
                         </div>
-                        <!-- <div class="popup_box_top_num">
-                            <label for="">รหัสวิชา :</label>
-                            <select name="num_subject" id="num_subject" placeholder="ตัวเลือก">
-                                <option value="1234">1234</option>
-                                <option value="5555">5555</option>
-                                <option value="9999">9999</option>
-                            </select>
+                        <div class="popup_box_tail">
+                            <button type="button" class="popup_box_tail_cancel">Cancel</button>
+                            <button type="submit" class="popup_box_tail_save">Save</button>  
                         </div>
-                        <div class="popup_box_top_name">
-                            <label for="">ชื่อวิชา :</label>
-                            <input type="text">
-                        </div> -->
-                   </div>
-                   <div class="popup_box_tail">
-                        <button class="popup_box_tail_cancel">
-                            Cancle
-                        </button>
-                        <button class="popup_box_tail_save">
-                            Save
-                        </button>
-                   </div>
+                    </form>  
                 </div>
             </div>
-    
         </div>
+
+        
     </div>
 </body>
 </html>

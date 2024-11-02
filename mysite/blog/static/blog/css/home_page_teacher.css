@@ -23,7 +23,6 @@
     height: 225px;
     /* background-color: orange; */
     border: 1px solid #CAD1D8;
-    margin-right: 50px;
     margin-bottom: 20px;
     border-radius: 20px;
     overflow: hidden;
@@ -35,13 +34,27 @@
     background-color: #E6F1FF;
     height: 75%;
  }
- .main_right_teacher_box_tail{
+ .main_right_teacher_box_tail {
     display: flex;
     justify-content: center;
-    align-items: center;
-    /* background-color: aquamarine; */
+    align-items: start;
+    flex-direction: column;
+    gap: 5px; /* เพิ่มระยะห่างระหว่างบรรทัด */
     height: 25%;
- }
+}
+.main_right_teacher_box_tail div {
+    margin-left: 15px;
+}
+.text-tail-code-subject {
+    color: #3F4D58;
+
+}
+.text-tail-subject-name {
+    color: #8896A3;
+
+}
+
+
 .box_add_subject{
     width: 80px;
     height: 80px;
