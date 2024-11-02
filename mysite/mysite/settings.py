@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'blog',
+    'corsheaders',  # สำหรับ CORS
+    'rest_framework',  # Django REST framework
+    'blog',  # แอปของคุณ
 ]
 
 MIDDLEWARE = [
@@ -52,9 +53,21 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+# Django CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
 ]
+CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_DOMAIN = ".localhost"
+
+
+# Ensure CSRF_COOKIE settings
+CSRF_COOKIE_SAMESITE = 'None'  # หรือ 'None' สำหรับ HTTPS
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:8000"]
+SESSION_COOKIE_DOMAIN = 'localhost'
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -107,6 +120,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',  
+    ],
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -130,3 +148,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Ensure these session settings are in settings.py
+CSRF_COOKIE_SECURE = False
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = False      # หากคุณใช้งานในโหมด HTTP
+SESSION_COOKIE_NAME = 'sessionid'  # ค่าพื้นฐานของชื่อ cookie session
+SESSION_COOKIE_AGE = 1209600  # 2 สัปดาห์ (in seconds)
