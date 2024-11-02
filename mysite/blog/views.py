@@ -35,6 +35,7 @@ def login_view(request):
                 request.session['user_id'] = user.student_id
                 request.session['firstname'] = user.firstname
                 request.session['lastname'] = user.lastname
+                request.session.modified = True  # ทำให้เซสชันถูกบันทึก
                 return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
             else:
                 return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
