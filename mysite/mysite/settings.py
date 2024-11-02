@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-m)1-&%z^l82ytl)(qyy9()a=*qe!k&-0-id8c32!(v73kilz&3
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -54,20 +52,18 @@ MIDDLEWARE = [
 ]
 
 # Django CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
-]
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:8000"
+# ]
+# CORS_ALLOW_CREDENTIALS = True
 
-SESSION_COOKIE_DOMAIN = ".localhost"
-
-
-# Ensure CSRF_COOKIE settings
-CSRF_COOKIE_SAMESITE = 'None'  # หรือ 'None' สำหรับ HTTPS
-CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:8000"]
-SESSION_COOKIE_DOMAIN = 'localhost'
+# # Ensure CSRF_COOKIE settings
+# CSRF_COOKIE_SAMESITE = 'None'
+# CSRF_TRUSTED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:8000"
+# ]
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -89,10 +85,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -100,11 +93,7 @@ DATABASES = {
     }
 }
 
-
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -122,13 +111,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  
+        'rest_framework.authentication.SessionAuthentication',
     ],
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -137,23 +124,35 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = 'static/'
 
-
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Ensure these session settings are in settings.py
+# Session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173"
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
+
 CSRF_COOKIE_SECURE = False
-SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'None'
+
 SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = False      # หากคุณใช้งานในโหมด HTTP
-SESSION_COOKIE_NAME = 'sessionid'  # ค่าพื้นฐานของชื่อ cookie session
-SESSION_COOKIE_AGE = 1209600  # 2 สัปดาห์ (in seconds)
+SESSION_COOKIE_SECURE = False
+
+SESSION_COOKIE_AGE = 1209600 
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# ตั้งค่าเซสชันใหม่ทุกครั้งที่มีการร้องขอ
+SESSION_SAVE_EVERY_REQUEST = True
+
+# หากต้องการให้เซสชันหมดอายุเมื่อผู้ใช้ออกจากระบบ ให้ตั้งค่า SESSION_EXPIRE_AT_BROWSER_CLOSE เป็น True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True

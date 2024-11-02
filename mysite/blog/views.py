@@ -8,6 +8,8 @@ from .models import *
 from .serializers import *
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
+from django.http import HttpResponseForbidden
+from django.http import JsonResponse
 #model.py
 from .models import *
 
@@ -36,7 +38,14 @@ def login_view(request):
                 request.session['firstname'] = user.firstname
                 request.session['lastname'] = user.lastname
                 request.session.modified = True  # ทำให้เซสชันถูกบันทึก
-                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                # ส่งข้อมูลเซสชันกลับไป
+                return Response({
+                    "message": "Login successful",
+                    "user_type": request.session['user_type'],
+                    "user_id": request.session['user_id'],
+                    "firstname": request.session['firstname'],
+                    "lastname": request.session['lastname']
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
         except Student.DoesNotExist:
@@ -50,14 +59,15 @@ def login_view(request):
                 request.session['firstname'] = user.firstname
                 request.session['lastname'] = user.lastname
                 request.session.modified = True  # ทำให้เซสชันถูกบันทึก
-
-                print("Session data before login:")
-                print("user_type:", request.session.get('user_type'))
-                print("user_id:", request.session.get('user_id'))
-                print("firstname:", request.session.get('firstname'))
-                print("lastname:", request.session.get('lastname'))
-
-                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                
+                # ส่งข้อมูลเซสชันกลับไป
+                return Response({
+                    "message": "Login successful",
+                    "user_type": request.session['user_type'],
+                    "user_id": request.session['user_id'],
+                    "firstname": request.session['firstname'],
+                    "lastname": request.session['lastname']
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
         except Teacher.DoesNotExist:
@@ -66,26 +76,17 @@ def login_view(request):
         return Response({"error": {"user_type": ["Invalid user type"]}}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def check_session(request):
-    # ตรวจสอบว่ามีค่าเซสชันหรือไม่
-    user_type = request.session.get('user_type')
-    user_id = request.session.get('user_id')
-    firstname = request.session.get('firstname')
-    lastname = request.session.get('lastname')
-    print("Session data after login:")
-    print("user_type:", request.session.get('user_type'))
-    print("user_id:", request.session.get('user_id'))
-    print("firstname:", request.session.get('firstname'))
-    print("lastname:", request.session.get('lastname'))
+def set_session(request):
+    request.session['username'] = 'Puthakun'  # ตั้งค่า session
+    return redirect('display_session')  # เปลี่ยนไปที่ฟังก์ชัน get_session
 
-    if user_type and user_id:  # ตรวจสอบว่ามีข้อมูลเซสชันที่ต้องการ
-        return Response({
-            "user_type": user_type,
-            "user_id": user_id,
-            "firstname": firstname,
-            "lastname": lastname
-        }, status=status.HTTP_200_OK)
-    else:
-        # หากไม่มีเซสชันให้ส่งข้อความผิดพลาดกลับไป
-        return Response({"error": "No active session found"}, status=status.HTTP_401_UNAUTHORIZED)
+def get_session(request):
+    username = request.session.get('username')  # ดึงค่า session
+    return render(request, 'blog/display_session.html', {'username': username})
+
+def delete_session(request):
+    try:
+        del request.session['username']  # ลบ session
+    except KeyError:
+        pass
+    return redirect('display_session')  # กลับไปที่ฟังก์ชัน get_session
