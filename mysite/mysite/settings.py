@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,22 +49,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
-# Django CORS settings
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://127.0.0.1:8000"
-# ]
-# CORS_ALLOW_CREDENTIALS = True
-
-# # Ensure CSRF_COOKIE settings
-# CSRF_COOKIE_SAMESITE = 'None'
-# CSRF_TRUSTED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://127.0.0.1:8000"
-# ]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # ให้ใช้ ModelBackend เป็นค่าเริ่มต้น
+]
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -135,7 +126,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"
+    "http://localhost:5174"
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
@@ -147,12 +138,14 @@ CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = False
 
-SESSION_COOKIE_AGE = 1209600 
+# SESSION_COOKIE_AGE = 1209600 
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-# ตั้งค่าเซสชันใหม่ทุกครั้งที่มีการร้องขอ
-SESSION_SAVE_EVERY_REQUEST = True
-
-# หากต้องการให้เซสชันหมดอายุเมื่อผู้ใช้ออกจากระบบ ให้ตั้งค่า SESSION_EXPIRE_AT_BROWSER_CLOSE เป็น True
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# # ตั้งค่าเซสชันใหม่ทุกครั้งที่มีการร้องขอ
+# SESSION_SAVE_EVERY_REQUEST = True
+
+# # หากต้องการให้เซสชันหมดอายุเมื่อผู้ใช้ออกจากระบบ ให้ตั้งค่า SESSION_EXPIRE_AT_BROWSER_CLOSE เป็น True
+# # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
