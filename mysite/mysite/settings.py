@@ -126,17 +126,21 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174"
+    "http://127.0.0.1:5173",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = False
+#CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_CREDENTIALS = True
-
 CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_SAMESITE = 'None'
-
-SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = False
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173/",
+]
 
 # SESSION_COOKIE_AGE = 1209600 
 
