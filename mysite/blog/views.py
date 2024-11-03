@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponseForbidden
 from django.http import JsonResponse
+from rest_framework import permissions
 #model.py
 from .models import *
 
@@ -76,17 +77,21 @@ def login_view(request):
         return Response({"error": {"user_type": ["Invalid user type"]}}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def set_session(request):
-    request.session['username'] = 'Puthakun'  # ตั้งค่า session
-    return redirect('display_session')  # เปลี่ยนไปที่ฟังก์ชัน get_session
 
-def get_session(request):
-    username = request.session.get('username')  # ดึงค่า session
-    return render(request, 'blog/display_session.html', {'username': username})
+class SubjectViewSet(viewsets.ModelViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
 
-def delete_session(request):
-    try:
-        del request.session['username']  # ลบ session
-    except KeyError:
-        pass
-    return redirect('display_session')  # กลับไปที่ฟังก์ชัน get_session
+    def perform_create(self, serializer):
+        teacher_id = self.request.data.get('teacher_id')  # ใช้ teacher_id
+        try:
+            teacher = Teacher.objects.get(teacher_id=teacher_id)
+            serializer.save(teacher=teacher)  
+            print("Subject saved successfully")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Teacher.DoesNotExist:
+            print("Teacher not found")
+            return Response({'error': 'Teacher not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print("Error saving subject:", e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
