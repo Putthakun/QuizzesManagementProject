@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
@@ -11,6 +12,7 @@ from django.contrib.auth.hashers import check_password
 from django.http import HttpResponseForbidden
 from django.http import JsonResponse
 from rest_framework import permissions
+from django.shortcuts import get_object_or_404
 #model.py
 from .models import *
 
@@ -40,6 +42,7 @@ def login_view(request):
                 request.session['lastname'] = user.lastname
                 request.session.modified = True  # ทำให้เซสชันถูกบันทึก
                 # ส่งข้อมูลเซสชันกลับไป
+
                 return Response({
                     "message": "Login successful",
                     "user_type": request.session['user_type'],
@@ -99,3 +102,18 @@ class SubjectViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print("Error saving subject:", e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class TeacherSubjectsView(generics.ListAPIView):
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        teacher_id = self.kwargs['teacher_id']  # รับ teacher_id จาก URL
+        return Subject.objects.filter(teacher__teacher_id=teacher_id)
+    
+class SubjectDetailByCodeView(generics.ListAPIView):
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        code = self.kwargs['code']  # รับ code จาก URL
+        return Subject.objects.filter(code=code)
