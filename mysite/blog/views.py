@@ -8,59 +8,14 @@ from .models import *
 from .serializers import *
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
-
+from django.http import HttpResponseForbidden
+from django.http import JsonResponse
+from rest_framework import permissions
 #model.py
 from .models import *
 
-import hashlib
-
-import re
-
 
 # Create your views here.
-
-def hello(request):
-    return render(request, 'blog/hello.html')
-
-def home(request):
-    return render(request, 'blog/home.html')
-
-def subject(request):
-    return render(request, 'blog/subject.html')
-
-def home_page(request):
-        return render(request, 'blog/home_page.html')
- 
-def subject_page(request):
-    return render(request, 'blog/subject_page.html')
-
-def take_test_page(request):
-    return render(request, 'blog/take_test_page.html')
-
-def multi_page(request):
-    return render(request, 'blog/multi_page.html')
-
-def home_page_teacher(request):
-     # ตรวจสอบให้แน่ใจว่าผู้ใช้ได้เข้าสู่ระบบผ่าน session
-    user_id = request.session.get('user_id')  # ดึง user_id จาก session
-    if user_id:
-        try:
-            # ดึงข้อมูลอาจารย์ตาม user_id ที่เก็บใน session
-            teacher = Teacher.objects.get(id=user_id)
-            # ดึงข้อมูลวิชาที่เชื่อมโยงกับอาจารย์
-            subjects = teacher.subjects.all()  # ใช้ related_name 'subjects'
-            return render(request, 'blog/home_page_teacher.html', {'subjects': subjects})
-        except Teacher.DoesNotExist:
-            # หากไม่พบอาจารย์ในฐานข้อมูล
-            return redirect('login')  # ส่งผู้ใช้ไปยังหน้าเข้าสู่ระบบ
-    else:
-        # หากยังไม่ได้เข้าสู่ระบบ อาจส่งผู้ใช้ไปยังหน้าเข้าสู่ระบบ
-        return redirect('login')  # เปลี่ยนเป็นชื่อ URL ที่ถูกต้อง
-
-def choice_page(request):
-    return render(request, 'blog/choice_page.html')
-
-
 #Register student
 class StudentRegisterView(generics.CreateAPIView):
     serializer_class = StudentSerializer
@@ -71,15 +26,27 @@ class TeacherRegisterView(generics.CreateAPIView):
 
 @api_view(['POST'])
 def login_view(request):
-    user_type = request.data.get('user_type')  # รับ user_type (student หรือ teacher)
-    user_id = request.data.get('id')           # รับ student_id หรือ teacher_id
-    password = request.data.get('password')    # รับรหัสผ่าน
+    user_type = request.data.get('user_type')  
+    user_id = request.data.get('id')           
+    password = request.data.get('password')    
 
     if user_type == 'student':
         try:
             user = Student.objects.get(student_id=user_id)
             if check_password(password, user.password):  # ตรวจสอบรหัสผ่าน
-                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                request.session['user_type'] = 'student'
+                request.session['user_id'] = user.student_id
+                request.session['firstname'] = user.firstname
+                request.session['lastname'] = user.lastname
+                request.session.modified = True  # ทำให้เซสชันถูกบันทึก
+                # ส่งข้อมูลเซสชันกลับไป
+                return Response({
+                    "message": "Login successful",
+                    "user_type": request.session['user_type'],
+                    "user_id": request.session['user_id'],
+                    "firstname": request.session['firstname'],
+                    "lastname": request.session['lastname']
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
         except Student.DoesNotExist:
@@ -88,10 +55,47 @@ def login_view(request):
         try:
             user = Teacher.objects.get(teacher_id=user_id)
             if check_password(password, user.password):  # ตรวจสอบรหัสผ่าน
-                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                request.session['user_type'] = 'teacher'
+                request.session['user_id'] = user.teacher_id
+                request.session['firstname'] = user.firstname
+                request.session['lastname'] = user.lastname
+                request.session.modified = True  # ทำให้เซสชันถูกบันทึก
+
+                teacher_subjects = user.subjects.all()
+                subjects_list = [{"code": subject.code, "name": subject.name} for subject in teacher_subjects]
+                
+                # ส่งข้อมูลเซสชันกลับไป
+                return Response({
+                    "message": "Login successful",
+                    "user_type": request.session['user_type'],
+                    "user_id": request.session['user_id'],
+                    "firstname": request.session['firstname'],
+                    "lastname": request.session['lastname'],
+                    "subjects": subjects_list
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
         except Teacher.DoesNotExist:
             return Response({"error": {"teacher_id": ["Teacher ID not found"]}}, status=status.HTTP_404_NOT_FOUND)
     else:
         return Response({"error": {"user_type": ["Invalid user type"]}}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class SubjectViewSet(viewsets.ModelViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
+
+    def perform_create(self, serializer):
+        teacher_id = self.request.data.get('teacher_id')  # ใช้ teacher_id
+        try:
+            teacher = Teacher.objects.get(teacher_id=teacher_id)
+            serializer.save(teacher=teacher)  
+            print("Subject saved successfully")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Teacher.DoesNotExist:
+            print("Teacher not found")
+            return Response({'error': 'Teacher not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print("Error saving subject:", e)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

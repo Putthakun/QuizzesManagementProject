@@ -19,9 +19,17 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 #from blog.views import *
 from blog import views
+from rest_framework.routers import DefaultRouter
+from blog.views import SubjectViewSet, StudentRegisterView, TeacherRegisterView, login_view
 
+
+router = DefaultRouter()
+router.register(r'subjects', SubjectViewSet, basename='subject')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/blog/', include('blog.urls')),
+    path('api/', include(router.urls)),  # เพิ่มเส้นทาง API สำหรับ SubjectViewSet
+    path('register/students/', StudentRegisterView.as_view(), name='register'),
+    path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
+    path('login/', login_view, name='login'),
 ]

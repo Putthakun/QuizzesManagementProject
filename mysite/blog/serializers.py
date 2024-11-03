@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from rest_framework import viewsets
 from django.contrib.auth.hashers import make_password
-from .models import Person, Student, Teacher
+from .models import *
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -42,3 +43,11 @@ class TeacherSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data['password'])
         teacher = Teacher.objects.create(**validated_data)
         return teacher
+
+
+class SubjectSerializer(serializers.ModelSerializer):
+    teacher_id = serializers.CharField(source='teacher.teacher_id', write_only=True)  # ใช้ teacher_id แทน teacher
+
+    class Meta:
+        model = Subject
+        fields = ['code', 'name', 'teacher_id']  # กำหนดฟิลด์ที่ต้องการรับและส่งกลับ
