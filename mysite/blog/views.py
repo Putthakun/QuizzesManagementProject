@@ -59,6 +59,9 @@ def login_view(request):
                 request.session['firstname'] = user.firstname
                 request.session['lastname'] = user.lastname
                 request.session.modified = True  # ทำให้เซสชันถูกบันทึก
+
+                teacher_subjects = user.subjects.all()
+                subjects_list = [{"code": subject.code, "name": subject.name} for subject in teacher_subjects]
                 
                 # ส่งข้อมูลเซสชันกลับไป
                 return Response({
@@ -66,7 +69,8 @@ def login_view(request):
                     "user_type": request.session['user_type'],
                     "user_id": request.session['user_id'],
                     "firstname": request.session['firstname'],
-                    "lastname": request.session['lastname']
+                    "lastname": request.session['lastname'],
+                    "subjects": subjects_list
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
