@@ -23,6 +23,8 @@ from rest_framework.routers import DefaultRouter
 from blog.views import SubjectViewSet, StudentRegisterView, TeacherRegisterView, login_view
 
 
+
+
 router = DefaultRouter()
 router.register(r'subjects', SubjectViewSet, basename='subject')
 
@@ -32,4 +34,5 @@ urlpatterns = [
     path('register/students/', StudentRegisterView.as_view(), name='register'),
     path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
     path('login/', login_view, name='login'),
+
 ]
