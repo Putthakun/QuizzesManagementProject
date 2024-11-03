@@ -126,7 +126,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174"
+    "http://localhost:5173"
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
