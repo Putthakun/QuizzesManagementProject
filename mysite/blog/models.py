@@ -51,13 +51,14 @@ class Subject(models.Model):
     code = models.CharField(max_length=8)
     name = models.CharField(max_length=100)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='subjects')
+    enrollments = models.ManyToManyField(Student, through='Enrollment', related_name='enrollment_subjects')
 
     def __str__(self):
         return self.name
     
 class Enrollment(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='enrollments')
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='enrollments')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student_enrollments')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='subject_enrollments')
 
     class Meta:
         unique_together = ('student', 'subject')  # ไม่ให้นักเรียนลงทะเบียนวิชาเดียวกันซ้ำ

@@ -35,6 +35,7 @@ urlpatterns = [
     path('register/students/', StudentRegisterView.as_view(), name='register'),
     path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
     path('api/teachers/<str:teacher_id>/subjects/', TeacherSubjectsView.as_view(), name='teacher-subjects'),
+    path('api/student/<str:student_id>/subjects/', StudentSubjectsView.as_view(), name='student-subjects'),
     path('api/subjects/code/<str:code>/', SubjectDetailByCodeView.as_view(), name='subject_detail_by_code'),
     path('api/exams/', ExamCreateView.as_view(), name='create_exam'),
     path('api/listexams/<str:subject_code>/', ExamListView.as_view(), name='exam-list'),

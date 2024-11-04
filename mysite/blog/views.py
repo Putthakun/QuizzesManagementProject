@@ -112,6 +112,13 @@ class TeacherSubjectsView(generics.ListAPIView):
         teacher_id = self.kwargs['teacher_id']  # รับ teacher_id จาก URL
         return Subject.objects.filter(teacher__teacher_id=teacher_id)
     
+class StudentSubjectsView(generics.ListAPIView):
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        student_id = self.kwargs['student_id']  # รับ student จาก URL
+        return Subject.objects.filter(enrollments__student_id=student_id)
+    
 class SubjectDetailByCodeView(generics.ListAPIView):
     serializer_class = SubjectSerializer
 
