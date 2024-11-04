@@ -78,7 +78,6 @@ class Exam(models.Model):
 class Question(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='questions')  # เชื่อมกับข้อสอบ
     question_text = models.TextField()  # เนื้อหาของคำถาม
-    question_type = models.CharField(max_length=50, choices=[('multiple_choice', 'Multiple Choice'), ('short_answer', 'Short Answer')], default='multiple_choice')  # ประเภทคำถาม
     points = models.PositiveIntegerField(default=1)  # คะแนนของคำถามแต่ละข้อ
     order = models.PositiveIntegerField()  # ลำดับคำถามในข้อสอบ
 
