@@ -45,12 +45,58 @@ class TeacherSerializer(serializers.ModelSerializer):
         teacher = Teacher.objects.create(**validated_data)
         return teacher
 
-
 class SubjectSerializer(serializers.ModelSerializer):
-    teacher_id = serializers.CharField(source='teacher.teacher_id', write_only=True)  # ใช้ teacher_id แทน teacher
+    teacher = serializers.StringRelatedField()  # หรือสร้าง serializer สำหรับ Teacher model
 
     class Meta:
         model = Subject
-        fields = ['code', 'name', 'teacher_id']  # กำหนดฟิลด์ที่ต้องการรับและส่งกลับ
+        fields = [ 'code', 'name', 'teacher']
 
-#-----------------
+
+class ExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exam
+        fields = ['id', 'subject_code', 'title', 'description', 'due_date', 'score',]
+
+    def validate_score(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Score must be a non-negative value.")
+        return value
+
+    def validate_due_date(self, value):
+        # ตรวจสอบว่า due_date ต้องมากกว่าปัจจุบัน
+        if value < timezone.now().date():
+            raise serializers.ValidationError("Due date must be in the future.")
+        return value
+
+
+class ChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Choice
+        fields = ['id', 'choice_text', 'is_correct']
+
+class QuestionSerializer(serializers.ModelSerializer):
+    choices = ChoiceSerializer(many=True)  # ใช้ Choice serializer แบบซ้อน
+    exam_id = serializers.IntegerField(write_only=True)  # ใช้ exam_id เพื่อเชื่อมกับข้อสอบที่มีอยู่แล้ว
+
+    class Meta:
+        model = Question
+        fields = ['id', 'exam_id', 'question_text', 'points', 'order', 'choices']
+
+    def create(self, validated_data):
+        choices_data = validated_data.pop('choices')
+        exam_id = validated_data.pop('exam_id')  # ดึง exam_id ที่ส่งมาเพื่อสร้างการเชื่อมโยงกับข้อสอบ
+        
+        # ตรวจสอบว่า exam_id มีอยู่ในฐานข้อมูลหรือไม่
+        try:
+            exam = Exam.objects.get(id=exam_id)
+        except Exam.DoesNotExist:
+            raise serializers.ValidationError({"exam_id": "Exam with this ID does not exist."})
+        
+        # สร้างคำถามที่เชื่อมโยงกับ Exam
+        question = Question.objects.create(exam=exam, **validated_data)
+        
+        # สร้างตัวเลือกที่เชื่อมโยงกับ Question ที่สร้างขึ้นใหม่
+        for choice_data in choices_data:
+            Choice.objects.create(question=question, **choice_data)
+        return question

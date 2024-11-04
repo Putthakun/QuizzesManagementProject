@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
@@ -11,6 +12,8 @@ from django.contrib.auth.hashers import check_password
 from django.http import HttpResponseForbidden
 from django.http import JsonResponse
 from rest_framework import permissions
+from django.shortcuts import get_object_or_404
+from django.views import View
 #model.py
 from .models import *
 
@@ -43,6 +46,7 @@ def login_view(request):
                 request.session['lastname'] = user.lastname
                 request.session.modified = True  # ทำให้เซสชันถูกบันทึก
                 # ส่งข้อมูลเซสชันกลับไป
+
                 return Response({
                     "message": "Login successful",
                     "user_type": request.session['user_type'],
@@ -63,6 +67,9 @@ def login_view(request):
                 request.session['firstname'] = user.firstname
                 request.session['lastname'] = user.lastname
                 request.session.modified = True  # ทำให้เซสชันถูกบันทึก
+
+                teacher_subjects = user.subjects.all()
+                subjects_list = [{"code": subject.code, "name": subject.name} for subject in teacher_subjects]
                 
                 # ส่งข้อมูลเซสชันกลับไป
                 return Response({
@@ -70,7 +77,8 @@ def login_view(request):
                     "user_type": request.session['user_type'],
                     "user_id": request.session['user_id'],
                     "firstname": request.session['firstname'],
-                    "lastname": request.session['lastname']
+                    "lastname": request.session['lastname'],
+                    "subjects": subjects_list
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": {"password": ["Invalid credentials"]}}, status=status.HTTP_401_UNAUTHORIZED)
@@ -127,3 +135,83 @@ def student_detail(request, student_id):
 
 
 
+
+class TeacherSubjectsView(generics.ListAPIView):
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        teacher_id = self.kwargs['teacher_id']  # รับ teacher_id จาก URL
+        return Subject.objects.filter(teacher__teacher_id=teacher_id)
+    
+class StudentSubjectsView(generics.ListAPIView):
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        student_id = self.kwargs['student_id']  # รับ student จาก URL
+        return Subject.objects.filter(enrollments__student_id=student_id)
+    
+class SubjectDetailByCodeView(generics.ListAPIView):
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        code = self.kwargs['code']  # รับ code จาก URL
+        return Subject.objects.filter(code=code)
+    
+
+class ExamCreateView(generics.CreateAPIView):
+    serializer_class = ExamSerializer
+
+    def create(self, request, *args, **kwargs):
+        subject_code = request.data.get('subject_code')  # ดึง subject_code จากข้อมูลที่ส่งมา
+        print(f"Received subject_code: {subject_code}")  # ตรวจสอบ subject_code ที่ได้รับ
+
+        # ค้นหา Subject โดยใช้ code
+        try:
+            subject = Subject.objects.get(code=subject_code)  # ค้นหา Subject ที่มี code ตรงกัน
+            print(f"Found subject: {subject}")  # ตรวจสอบว่าพบ Subject หรือไม่
+            request.data['subject_code'] = subject.id  # แทนที่ subject_code ด้วย ID ของ Subject
+        except Subject.DoesNotExist:
+            return Response({"detail": "Subject not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # เรียกใช้ serializer เพื่อสร้าง Exam
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            # คืนค่า ID ของ exam ที่ถูกสร้าง
+            return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class ExamViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ExamSerializer
+    lookup_field = 'subject_code'  # ตั้งค่าให้ใช้ subject_code เป็น lookup field
+
+    def get_queryset(self):
+        subject_code = self.kwargs.get('subject_code')  # ดึงค่า subject_code จาก URL
+        if subject_code:
+            return Exam.objects.filter(subject_code__code=subject_code)  # กรอง Exam ตาม subject_code
+        return Exam.objects.all()  # ถ้าไม่มี subject_code ให้คืนค่าทั้งหมด
+    
+
+class ExamListView(generics.CreateAPIView):
+    def get(self, request, subject_code):
+        # Get the Subject instance based on the subject code
+        subject = get_object_or_404(Subject, code=subject_code)  # Assume 'code' is the field for subject_code
+        # Now use the id of the subject to filter exams
+        exams = Exam.objects.filter(subject_code=subject.id).values()
+        return JsonResponse(list(exams), safe=False)
+    
+
+    
+class QuestionCreateView(generics.CreateAPIView):
+    serializer_class = QuestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)  # รับข้อมูลคำถามหลายข้อ
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

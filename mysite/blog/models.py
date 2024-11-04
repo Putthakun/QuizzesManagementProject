@@ -1,10 +1,7 @@
 from django.db import models
-
-# Create your models here.
-# models.py
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.db import models
-from django.contrib.auth.models import User
-
 from django.core.validators import RegexValidator
 
 # Create your models here.
@@ -51,16 +48,46 @@ class Subject(models.Model):
     code = models.CharField(max_length=8)
     name = models.CharField(max_length=100)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='subjects')
+    enrollments = models.ManyToManyField(Student, through='Enrollment', related_name='enrollment_subjects')
 
     def __str__(self):
         return self.name
     
 class Enrollment(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='enrollments')
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='enrollments')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student_enrollments')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='subject_enrollments')
 
     class Meta:
         unique_together = ('student', 'subject')  # ไม่ให้นักเรียนลงทะเบียนวิชาเดียวกันซ้ำ
 
     def __str__(self):
         return f"{self.student} enrolled in {self.subject}"
+    
+
+class Exam(models.Model):
+    subject_code  = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='exams')
+    title = models.CharField(max_length=255)  # ชื่อข้อสอบ
+    description = models.TextField(blank=True)  # รายละเอียดข้อสอบ
+    due_date = models.DateField()  # วันครบกำหนดสำหรับข้อสอบ
+    score = models.PositiveIntegerField()  # คะแนนสูงสุด
+
+    def __str__(self):
+        return f"{self.title} for {self.subject_code.name}"
+    
+    
+class Question(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='questions')  # เชื่อมกับข้อสอบ
+    question_text = models.TextField()  # เนื้อหาของคำถาม
+    points = models.PositiveIntegerField(default=1)  # คะแนนของคำถามแต่ละข้อ
+    order = models.PositiveIntegerField()  # ลำดับคำถามในข้อสอบ
+
+    def __str__(self):
+        return f"Question {self.order} for {self.exam.title}"
+    
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choices')  # เชื่อมกับคำถาม
+    choice_text = models.CharField(max_length=255)  # ตัวเลือกคำตอบ
+    is_correct = models.BooleanField(default=False)  # ใช้ระบุว่าตัวเลือกนี้เป็นคำตอบที่ถูกต้องหรือไม่
+
+    def __str__(self):
+        return f"Choice for Question {self.question.id}: {self.choice_text}"
