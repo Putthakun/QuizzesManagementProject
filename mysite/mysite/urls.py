@@ -20,7 +20,8 @@ from django.contrib.auth import views as auth_views
 #from blog.views import *
 from blog import views
 from rest_framework.routers import DefaultRouter
-from blog.views import SubjectViewSet, StudentRegisterView, TeacherRegisterView, login_view
+from blog.views import *
+from django.urls import re_path
 
 
 router = DefaultRouter()
@@ -31,5 +32,7 @@ urlpatterns = [
     path('api/', include(router.urls)),  # เพิ่มเส้นทาง API สำหรับ SubjectViewSet
     path('register/students/', StudentRegisterView.as_view(), name='register'),
     path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
+    path('api/teachers/<str:teacher_id>/subjects/', TeacherSubjectsView.as_view(), name='teacher-subjects'),
+    path('api/subjects/code/<str:code>/', SubjectDetailByCodeView.as_view(), name='subject_detail_by_code'),
     path('login/', login_view, name='login'),
 ]

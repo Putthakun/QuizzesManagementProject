@@ -44,10 +44,9 @@ class TeacherSerializer(serializers.ModelSerializer):
         teacher = Teacher.objects.create(**validated_data)
         return teacher
 
-
 class SubjectSerializer(serializers.ModelSerializer):
-    teacher_id = serializers.CharField(source='teacher.teacher_id', write_only=True)  # ใช้ teacher_id แทน teacher
+    teacher = serializers.StringRelatedField()  # หรือสร้าง serializer สำหรับ Teacher model
 
     class Meta:
         model = Subject
-        fields = ['code', 'name', 'teacher_id']  # กำหนดฟิลด์ที่ต้องการรับและส่งกลับ
+        fields = [ 'code', 'name', 'teacher']
