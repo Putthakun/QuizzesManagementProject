@@ -50,3 +50,11 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = [ 'code', 'name', 'teacher']
+
+
+class ExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exam
+        fields = ['subject_code', 'title', 'description', 'due_date', 'score']
+
+  
