@@ -14,6 +14,9 @@ from rest_framework import permissions
 #model.py
 from .models import *
 
+from django.views.decorators.http import require_GET
+from rest_framework.decorators import action
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 #Register student
@@ -95,6 +98,32 @@ class SubjectViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print("Error saving subject:", e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+#---------------- api edit profile --------------------#
+@api_view(['GET', 'PATCH'])
+def student_detail(request, student_id):
+    try:
+        student = Student.objects.get(student_id=student_id)  # ค้นหานักเรียนตาม student_id
+        
+    except Student.DoesNotExist:
+        return Response({"detail": "Student not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        data = request.data
+
+        # อัปเดตเฉพาะ firstname และ lastname
+        student.firstname = data.get('firstname', student.firstname)
+        student.lastname = data.get('lastname', student.lastname)
+        student.save()
+
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+        
+#---------------- api edit profile --------------------#
 
 
 
