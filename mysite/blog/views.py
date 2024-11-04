@@ -146,9 +146,11 @@ class ExamCreateView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # คืนค่า ID ของ exam ที่ถูกสร้าง
+            return Response({"id": serializer.data['id']}, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class ExamViewSet(viewsets.ReadOnlyModelViewSet):
@@ -169,3 +171,16 @@ class ExamListView(generics.CreateAPIView):
         # Now use the id of the subject to filter exams
         exams = Exam.objects.filter(subject_code=subject.id).values()
         return JsonResponse(list(exams), safe=False)
+    
+
+    
+class QuestionCreateView(generics.CreateAPIView):
+    serializer_class = QuestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)  # รับข้อมูลคำถามหลายข้อ
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
