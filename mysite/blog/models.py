@@ -1,10 +1,7 @@
 from django.db import models
-
-# Create your models here.
-# models.py
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.db import models
-from django.contrib.auth.models import User
-
 from django.core.validators import RegexValidator
 
 # Create your models here.
@@ -77,10 +74,10 @@ class Exam(models.Model):
     def __str__(self):
         return f"{self.title} for {self.subject_code.name}"
     
+    
 class Question(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='questions')  # เชื่อมกับข้อสอบ
     question_text = models.TextField()  # เนื้อหาของคำถาม
-    question_type = models.CharField(max_length=50, choices=[('multiple_choice', 'Multiple Choice'), ('short_answer', 'Short Answer')], default='multiple_choice')  # ประเภทคำถาม
     points = models.PositiveIntegerField(default=1)  # คะแนนของคำถามแต่ละข้อ
     order = models.PositiveIntegerField()  # ลำดับคำถามในข้อสอบ
 

@@ -39,4 +39,5 @@ urlpatterns = [
     path('api/subjects/code/<str:code>/', SubjectDetailByCodeView.as_view(), name='subject_detail_by_code'),
     path('api/exams/', ExamCreateView.as_view(), name='create_exam'),
     path('api/listexams/<str:subject_code>/', ExamListView.as_view(), name='exam-list'),
+    path('api/questionCreateView/', QuestionCreateView.as_view(), name='question-create'),
 ]
