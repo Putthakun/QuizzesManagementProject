@@ -64,3 +64,32 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f"{self.student} enrolled in {self.subject}"
+    
+
+class Exam(models.Model):
+    subject_code  = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='exams')
+    title = models.CharField(max_length=255)  # ชื่อข้อสอบ
+    description = models.TextField(blank=True)  # รายละเอียดข้อสอบ
+    due_date = models.DateField()  # วันครบกำหนดสำหรับข้อสอบ
+    score = models.PositiveIntegerField()  # คะแนนสูงสุด
+
+    def __str__(self):
+        return f"{self.title} for {self.subject_code.name}"
+    
+class Question(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='questions')  # เชื่อมกับข้อสอบ
+    question_text = models.TextField()  # เนื้อหาของคำถาม
+    question_type = models.CharField(max_length=50, choices=[('multiple_choice', 'Multiple Choice'), ('short_answer', 'Short Answer')], default='multiple_choice')  # ประเภทคำถาม
+    points = models.PositiveIntegerField(default=1)  # คะแนนของคำถามแต่ละข้อ
+    order = models.PositiveIntegerField()  # ลำดับคำถามในข้อสอบ
+
+    def __str__(self):
+        return f"Question {self.order} for {self.exam.title}"
+    
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choices')  # เชื่อมกับคำถาม
+    choice_text = models.CharField(max_length=255)  # ตัวเลือกคำตอบ
+    is_correct = models.BooleanField(default=False)  # ใช้ระบุว่าตัวเลือกนี้เป็นคำตอบที่ถูกต้องหรือไม่
+
+    def __str__(self):
+        return f"Choice for Question {self.question.id}: {self.choice_text}"

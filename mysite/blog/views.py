@@ -13,6 +13,7 @@ from django.http import HttpResponseForbidden
 from django.http import JsonResponse
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
+from django.views import View
 #model.py
 from .models import *
 
@@ -117,3 +118,42 @@ class SubjectDetailByCodeView(generics.ListAPIView):
     def get_queryset(self):
         code = self.kwargs['code']  # รับ code จาก URL
         return Subject.objects.filter(code=code)
+    
+
+class ExamCreateView(generics.CreateAPIView):
+    serializer_class = ExamSerializer
+
+    def create(self, request, *args, **kwargs):
+        subject_code = request.data.get('subject_code')  # ดึง subject_code จากข้อมูลที่ส่งมา
+        print(f"Received subject_code: {subject_code}")  # ตรวจสอบ subject_code ที่ได้รับ
+
+        # ค้นหา Subject โดยใช้ code
+        try:
+            subject = Subject.objects.get(code=subject_code)  # ค้นหา Subject ที่มี code ตรงกัน
+            print(f"Found subject: {subject}")  # ตรวจสอบว่าพบ Subject หรือไม่
+            request.data['subject_code'] = subject.id  # แทนที่ subject_code ด้วย ID ของ Subject
+        except Subject.DoesNotExist:
+            return Response({"detail": "Subject not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # เรียกใช้ serializer เพื่อสร้าง Exam
+        return super().create(request, *args, **kwargs)
+
+
+class ExamViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ExamSerializer
+    lookup_field = 'subject_code'  # ตั้งค่าให้ใช้ subject_code เป็น lookup field
+
+    def get_queryset(self):
+        subject_code = self.kwargs.get('subject_code')  # ดึงค่า subject_code จาก URL
+        if subject_code:
+            return Exam.objects.filter(subject_code__code=subject_code)  # กรอง Exam ตาม subject_code
+        return Exam.objects.all()  # ถ้าไม่มี subject_code ให้คืนค่าทั้งหมด
+    
+
+class ExamListView(generics.CreateAPIView):
+    def get(self, request, subject_code):
+        # Get the Subject instance based on the subject code
+        subject = get_object_or_404(Subject, code=subject_code)  # Assume 'code' is the field for subject_code
+        # Now use the id of the subject to filter exams
+        exams = Exam.objects.filter(subject_code=subject.id).values()
+        return JsonResponse(list(exams), safe=False)
