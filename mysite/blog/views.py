@@ -143,7 +143,12 @@ class ExamCreateView(generics.CreateAPIView):
             return Response({"detail": "Subject not found."}, status=status.HTTP_404_NOT_FOUND)
 
         # เรียกใช้ serializer เพื่อสร้าง Exam
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ExamViewSet(viewsets.ReadOnlyModelViewSet):

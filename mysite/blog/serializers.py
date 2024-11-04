@@ -57,4 +57,13 @@ class ExamSerializer(serializers.ModelSerializer):
         model = Exam
         fields = ['subject_code', 'title', 'description', 'due_date', 'score']
 
-  
+    def validate_score(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Score must be a non-negative value.")
+        return value
+
+    def validate_due_date(self, value):
+        # ตรวจสอบว่า due_date ต้องมากกว่าปัจจุบัน
+        if value < timezone.now().date():
+            raise serializers.ValidationError("Due date must be in the future.")
+        return value
