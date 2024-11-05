@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
 from django.views import View
+import logging
 #model.py
 from .models import *
 
@@ -242,4 +243,115 @@ class QuestionCreateView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+class ExamQuestionsView(APIView):
+    def get(self, request, exam_id):
+        try:
+            # ตรวจสอบว่า Exam มีอยู่จริงหรือไม่
+            exam = Exam.objects.get(id=exam_id)
+        except Exam.DoesNotExist:
+            return Response({"error": "Exam not found"}, status=status.HTTP_404_NOT_FOUND)
 
+        # ดึง Questions ทั้งหมดที่เชื่อมกับ Exam ที่ระบุ
+        questions = Question.objects.filter(exam=exam).order_by('order')
+        serializer = QuestionSerializer(questions, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UpdateQuestionsView(APIView):
+    def put(self, request):
+        data = request.data
+        questions_data = data.get('questions', [])
+
+        for question_data in questions_data:
+            question_id = question_data.get('id')
+            try:
+                question = Question.objects.get(id=question_id)
+                serializer = QuestionSerializer(question, data=question_data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Question.DoesNotExist:
+                return Response({"error": f"Question with id {question_id} does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({"message": "Questions updated successfully."}, status=status.HTTP_200_OK)
+    
+@api_view(['PUT', 'PATCH'])
+def update_questions(request):
+    quiz_data = request.data
+    logging.info(f"Received data: {quiz_data}")  # เพิ่ม log สำหรับตรวจสอบข้อมูลที่ได้รับ
+
+    for question_data in quiz_data:
+        question_id = question_data.get('exam_id')
+        logging.info(f"Processing question ID: {question_id}")  # log question ID
+        try:
+            question = Question.objects.get(id=question_id)
+            question_serializer = QuestionUpdateSerializer(question, data=question_data, partial=True)
+            if question_serializer.is_valid():
+                question_serializer.save()
+            else:
+                logging.error(f"Question serializer errors: {question_serializer.errors}")  # log ข้อผิดพลาด
+                return Response(question_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            for choice_data in question_data.get('choices', []):
+                choice_id = choice_data.get('id')
+                if choice_id:
+                    try:
+                        choice = Choice.objects.get(id=choice_id, question=question)
+                        choice_serializer = ChoiceSerializer(choice, data=choice_data, partial=True)
+                        if choice_serializer.is_valid():
+                            choice_serializer.save()
+                        else:
+                            logging.error(f"Choice serializer errors: {choice_serializer.errors}")  # log ข้อผิดพลาด
+                            return Response(choice_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    except Choice.DoesNotExist:
+                        return Response({'error': 'Choice not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Question.DoesNotExist:
+            return Response({'error': 'Question not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({'message': 'Questions and choices updated successfully'}, status=status.HTTP_200_OK)
+
+
+@api_view(['DELETE'])
+def delete_all_questions(request):
+    exam_id = request.data.get('exam_id')  # ดึง exam_id จาก request body
+    if not exam_id:
+        return Response({"error": "exam_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # ลบคำถามทั้งหมดที่เกี่ยวข้องกับ exam_id
+        Question.objects.filter(exam_id=exam_id).delete()
+        return Response({"message": "All questions deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class ExamDeleteView(APIView):
+    def delete(self, request, exam_id):
+        try:
+            exam = Exam.objects.get(id=exam_id)  # ค้นหาข้อสอบตาม ID
+            exam.delete()  # ลบข้อสอบ
+            return Response({'message': 'Exam deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+        except Exam.DoesNotExist:
+            return Response({'error': 'Exam not found!'}, status=status.HTTP_404_NOT_FOUND)
+        
+@api_view(['POST'])
+def enroll_subject(request):
+    student_id = request.data.get('student_id')
+    subject_code = request.data.get('subject_code')
+
+    try:
+        student = Student.objects.get(student_id=student_id)
+        subject = Subject.objects.get(code=subject_code)
+        
+        enrollment, created = Enrollment.objects.get_or_create(student=student, subject=subject)
+
+        if created:
+            return Response({'message': 'Enrollment created successfully.'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'message': 'Student is already enrolled in this subject.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found.'}, status=status.HTTP_404_NOT_FOUND)
+    except Subject.DoesNotExist:
+        return Response({'error': 'Subject not found.'}, status=status.HTTP_404_NOT_FOUND)
