@@ -107,7 +107,7 @@ class SubjectViewSet(viewsets.ModelViewSet):
             print("Error saving subject:", e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
-#---------------- api edit profile --------------------#
+
 @api_view(['GET', 'PATCH'])
 def student_detail(request, student_id):
     try:
@@ -130,8 +130,32 @@ def student_detail(request, student_id):
 
         serializer = StudentSerializer(student)
         return Response(serializer.data)
+    
+@api_view(['GET', 'PATCH'])
+def teacher_detail(request,teacher_id):
+    try:
+        teacher = Teacher.objects.get(teacher_id=teacher_id)  
         
-#---------------- api edit profile --------------------#
+    except Teacher.DoesNotExist:
+        return Response({"detail": "Teacher not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = TeacherSerializer(teacher)
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        data = request.data
+
+        # อัปเดตเฉพาะ firstname และ lastname
+        teacher.firstname = data.get('firstname', teacher.firstname)
+        teacher.lastname = data.get('lastname', teacher.lastname)
+        teacher.save()
+
+        serializer = TeacherSerializer(teacher)
+        return Response(serializer.data)
+    
+        
+
 
 
 
@@ -142,6 +166,7 @@ class TeacherSubjectsView(generics.ListAPIView):
     def get_queryset(self):
         teacher_id = self.kwargs['teacher_id']  # รับ teacher_id จาก URL
         return Subject.objects.filter(teacher__teacher_id=teacher_id)
+    
     
 class StudentSubjectsView(generics.ListAPIView):
     serializer_class = SubjectSerializer
@@ -215,3 +240,6 @@ class QuestionCreateView(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+

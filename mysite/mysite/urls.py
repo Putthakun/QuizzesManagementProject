@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 #from blog.views import *
 from blog import views
 from rest_framework.routers import DefaultRouter
-from blog.views import SubjectViewSet, StudentRegisterView, TeacherRegisterView, login_view, student_detail
+from blog.views import SubjectViewSet, StudentRegisterView, TeacherRegisterView, login_view, student_detail, teacher_detail
 
 
 from blog.views import *
@@ -39,6 +39,7 @@ urlpatterns = [
     path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
     path('login/', login_view, name='login'),
     path('edit-username/<str:student_id>/', student_detail, name='edit_username'),
+    path('edit-username/teacher/<str:teacher_id>/', teacher_detail, name='edit_username_teacher'),
 
 
     path('api/teachers/<str:teacher_id>/subjects/', TeacherSubjectsView.as_view(), name='teacher-subjects'),
