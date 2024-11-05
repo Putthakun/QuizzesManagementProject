@@ -278,3 +278,24 @@ class ExamDeleteView(APIView):
             return Response({'message': 'Exam deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
         except Exam.DoesNotExist:
             return Response({'error': 'Exam not found!'}, status=status.HTTP_404_NOT_FOUND)
+        
+@api_view(['POST'])
+def enroll_subject(request):
+    student_id = request.data.get('student_id')
+    subject_code = request.data.get('subject_code')
+
+    try:
+        student = Student.objects.get(student_id=student_id)
+        subject = Subject.objects.get(code=subject_code)
+        
+        enrollment, created = Enrollment.objects.get_or_create(student=student, subject=subject)
+
+        if created:
+            return Response({'message': 'Enrollment created successfully.'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'message': 'Student is already enrolled in this subject.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found.'}, status=status.HTTP_404_NOT_FOUND)
+    except Subject.DoesNotExist:
+        return Response({'error': 'Subject not found.'}, status=status.HTTP_404_NOT_FOUND)
