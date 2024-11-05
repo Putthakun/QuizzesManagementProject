@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
 from django.views import View
+from rest_framework.decorators import action
 import logging
 #model.py
 from .models import *
@@ -299,3 +300,57 @@ def enroll_subject(request):
         return Response({'error': 'Student not found.'}, status=status.HTTP_404_NOT_FOUND)
     except Subject.DoesNotExist:
         return Response({'error': 'Subject not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
+class QuestionListStudentView(generics.ListAPIView):
+    serializer_class = ChoiceStudentListSerializer
+
+    def get_queryset(self):
+        exam_id = self.kwargs['exam_id']  
+
+        exam = get_object_or_404(Exam, id=exam_id)
+        if self.request.user in exam.submitted_students.all():
+            raise PermissionDenied("You cannot access this exam as it has already been submitted.")
+        
+        return Question.objects.filter(exam__id=exam_id) 
+    
+class AnswerCreateView(generics.CreateAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+
+    def create(self, request, *args, **kwargs):
+        answers_data = request.data  # รับข้อมูลจาก request
+
+        # สร้างลิสต์สำหรับเก็บ serializer
+        serializers = []
+        for answer_data in answers_data:
+            serializer = self.get_serializer(data=answer_data)
+            serializer.is_valid(raise_exception=True)
+            serializers.append(serializer)
+
+        # บันทึกทุกคำตอบ
+        for serializer in serializers:
+            self.perform_create(serializer)
+
+        return Response([s.data for s in serializers], status=status.HTTP_201_CREATED)
+    
+class ExamCheckViewSet(viewsets.ModelViewSet):
+    queryset = Exam.objects.all()
+    serializer_class = ExamCheckSerializer
+
+    @action(detail=False, methods=['get'], url_path='(?P<exam_id>[^/.]+)results')  # กำหนด url_path เพื่อให้เข้ากับ URL
+    def results(self, request, exam_id=None):
+        exam = self.get_queryset().filter(id=exam_id).first()  # ดึง Exam ตาม ID ที่ส่งมา
+        if not exam:
+            return Response({'error': 'Exam not found'}, status=404)
+        
+        answers = Answer.objects.filter(exam=exam).select_related('student', 'question', 'selected_choice')
+        results = []
+        for answer in answers:
+            results.append({
+                'student': answer.student.firstname,
+                'question': answer.question.question_text,
+                'selected_choice': answer.selected_choice.choice_text,
+                'is_correct': answer.selected_choice.is_correct,  # ตรวจสอบว่าคำตอบถูกต้อง
+                'order': answer.question.order
+            })
+        return Response({'exam': exam.title, 'results': results})

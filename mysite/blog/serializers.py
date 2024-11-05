@@ -122,3 +122,42 @@ class QuestionUpdateSerializer(serializers.ModelSerializer):
         model = Question
         fields = '__all__'  # หรือระบุฟิลด์ที่ต้องการ
     
+class ChoiceStudentListSerializer(serializers.ModelSerializer):
+    choices = ChoiceSerializer(many=True, read_only=True)  # สร้างฟิลด์ 'choices' สำหรับดึงข้อมูล choices
+
+    class Meta:
+        model = Question
+        fields = ['id','exam', 'question_text', 'question_type', 'points', 'order', 'choices']  # เพิ่ม 'choices'
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    student = serializers.CharField()  # ใช้ CharField สำหรับ student_id
+
+    class Meta:
+        model = Answer
+        fields = ['student', 'question', 'selected_choice', 'exam']
+
+    def create(self, validated_data):
+        student_id = validated_data.pop('student')  # ดึง student_id ออกจาก validated_data
+        try:
+            student = Student.objects.get(student_id=student_id)
+        except Student.DoesNotExist:
+            raise serializers.ValidationError({"student": "Student not found."})
+
+        # ใช้ student ที่ค้นพบเพื่อสร้าง Answer
+        return Answer.objects.create(student=student, **validated_data)
+    
+class ExamCheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exam
+        fields = '__all__'
+
+class QuestionCheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = '__all__'
+
+class AnswerCheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = '__all__'
