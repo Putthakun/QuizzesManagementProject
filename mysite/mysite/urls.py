@@ -53,5 +53,8 @@ urlpatterns = [
     path('api/delete-all-questions/', delete_all_questions, name='delete_all_questions'),
     path('api/exams/<int:exam_id>/delete/', ExamDeleteView.as_view(), name='exam-delete'),
     path('api/enroll/', enroll_subject, name='enroll_subject'),
+    path('api/exams/<int:exam_id>/questions/', QuestionListStudentView.as_view(), name='question-list'),
+    path('api/answers/', AnswerCreateView.as_view(), name='answer-create'),
+    path('api/exams/<int:exam_id>/results/', ExamCheckViewSet.as_view({'get': 'results'}), name='exam-results'),
    
 ]

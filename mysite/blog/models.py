@@ -91,3 +91,18 @@ class Choice(models.Model):
 
     def __str__(self):
         return f"Choice for Question {self.question.id}: {self.choice_text}"
+    
+class Answer(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='answers')  # เชื่อมโยงกับนักเรียน
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')  # เชื่อมโยงกับคำถาม
+    selected_choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='answers')  # เชื่อมโยงกับตัวเลือกที่นักเรียนเลือก
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='answers')  # เชื่อมโยงกับข้อสอบ
+
+    class Meta:
+        unique_together = ('student', 'question')  # ไม่ให้นักเรียนตอบคำถามเดียวกันซ้ำ
+
+    def __str__(self):
+        return f"{self.student} answered {self.question} with choice {self.selected_choice}"
+    
+    def is_correct(self):
+        return self.selected_choice.is_correct
