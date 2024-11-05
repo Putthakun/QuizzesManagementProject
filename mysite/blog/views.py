@@ -256,3 +256,16 @@ def update_questions(request):
 
     return Response({'message': 'Questions and choices updated successfully'}, status=status.HTTP_200_OK)
 
+
+@api_view(['DELETE'])
+def delete_all_questions(request):
+    exam_id = request.data.get('exam_id')  # ดึง exam_id จาก request body
+    if not exam_id:
+        return Response({"error": "exam_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # ลบคำถามทั้งหมดที่เกี่ยวข้องกับ exam_id
+        Question.objects.filter(exam_id=exam_id).delete()
+        return Response({"message": "All questions deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
