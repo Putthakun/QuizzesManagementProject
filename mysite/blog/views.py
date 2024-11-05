@@ -269,3 +269,12 @@ def delete_all_questions(request):
         return Response({"message": "All questions deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class ExamDeleteView(APIView):
+    def delete(self, request, exam_id):
+        try:
+            exam = Exam.objects.get(id=exam_id)  # ค้นหาข้อสอบตาม ID
+            exam.delete()  # ลบข้อสอบ
+            return Response({'message': 'Exam deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+        except Exam.DoesNotExist:
+            return Response({'error': 'Exam not found!'}, status=status.HTTP_404_NOT_FOUND)

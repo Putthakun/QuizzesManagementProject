@@ -43,5 +43,6 @@ urlpatterns = [
     path('api/exams/<int:exam_id>/questions/', ExamQuestionsView.as_view(), name='exam-questions'),
     path('api/update-questions/', UpdateQuestionsView.as_view(), name='update-questions'),
     path('api/delete-all-questions/', delete_all_questions, name='delete_all_questions'),
+    path('api/exams/<int:exam_id>/delete/', ExamDeleteView.as_view(), name='exam-delete'),
    
 ]
