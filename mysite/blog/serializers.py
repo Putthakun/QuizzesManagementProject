@@ -83,6 +83,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ['id', 'exam_id', 'question_text', 'points', 'order', 'choices']
 
     def create(self, validated_data):
+        choices = ChoiceSerializer(many=True)
         choices_data = validated_data.pop('choices')
         exam_id = validated_data.pop('exam_id')  # ดึง exam_id ที่ส่งมาเพื่อสร้างการเชื่อมโยงกับข้อสอบ
         
@@ -99,3 +100,25 @@ class QuestionSerializer(serializers.ModelSerializer):
         for choice_data in choices_data:
             Choice.objects.create(question=question, **choice_data)
         return question
+    
+    def update(self, instance, validated_data):
+        choices_data = validated_data.pop('choices', [])
+        instance.question_text = validated_data.get('question_text', instance.question_text)
+        instance.points = validated_data.get('points', instance.points)
+        instance.order = validated_data.get('order', instance.order)
+        instance.save()
+
+        # ลบ choices ที่มีอยู่ทั้งหมด
+        instance.choices.all().delete()
+
+        # สร้าง choices ใหม่
+        for choice_data in choices_data:
+            Choice.objects.create(question=instance, **choice_data)
+
+        return instance
+    
+class QuestionUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = '__all__'  # หรือระบุฟิลด์ที่ต้องการ
+    

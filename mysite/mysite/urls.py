@@ -40,4 +40,7 @@ urlpatterns = [
     path('api/exams/', ExamCreateView.as_view(), name='create_exam'),
     path('api/listexams/<str:subject_code>/', ExamListView.as_view(), name='exam-list'),
     path('api/questionCreateView/', QuestionCreateView.as_view(), name='question-create'),
+    path('api/exams/<int:exam_id>/questions/', ExamQuestionsView.as_view(), name='exam-questions'),
+    path('api/update-questions/', UpdateQuestionsView.as_view(), name='update-questions'),
+   
 ]
