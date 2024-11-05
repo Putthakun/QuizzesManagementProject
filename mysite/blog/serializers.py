@@ -26,7 +26,8 @@ class StudentSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data['password'])
         student = Student.objects.create(**validated_data)
         return student
-
+    
+    
 #register teacher
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:

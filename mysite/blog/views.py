@@ -18,6 +18,9 @@ import logging
 #model.py
 from .models import *
 
+from django.views.decorators.http import require_GET
+from rest_framework.decorators import action
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 #Register student
@@ -106,12 +109,65 @@ class SubjectViewSet(viewsets.ModelViewSet):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
 
+@api_view(['GET', 'PATCH'])
+def student_detail(request, student_id):
+    try:
+        student = Student.objects.get(student_id=student_id)  # ค้นหานักเรียนตาม student_id
+        
+    except Student.DoesNotExist:
+        return Response({"detail": "Student not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        data = request.data
+
+        # อัปเดตเฉพาะ firstname และ lastname
+        student.firstname = data.get('firstname', student.firstname)
+        student.lastname = data.get('lastname', student.lastname)
+        student.save()
+
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+    
+@api_view(['GET', 'PATCH'])
+def teacher_detail(request,teacher_id):
+    try:
+        teacher = Teacher.objects.get(teacher_id=teacher_id)  
+        
+    except Teacher.DoesNotExist:
+        return Response({"detail": "Teacher not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = TeacherSerializer(teacher)
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        data = request.data
+
+        # อัปเดตเฉพาะ firstname และ lastname
+        teacher.firstname = data.get('firstname', teacher.firstname)
+        teacher.lastname = data.get('lastname', teacher.lastname)
+        teacher.save()
+
+        serializer = TeacherSerializer(teacher)
+        return Response(serializer.data)
+    
+        
+
+
+
+
+
 class TeacherSubjectsView(generics.ListAPIView):
     serializer_class = SubjectSerializer
 
     def get_queryset(self):
         teacher_id = self.kwargs['teacher_id']  # รับ teacher_id จาก URL
         return Subject.objects.filter(teacher__teacher_id=teacher_id)
+    
     
 class StudentSubjectsView(generics.ListAPIView):
     serializer_class = SubjectSerializer
